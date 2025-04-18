@@ -1,10 +1,8 @@
-#include <iostream>
-#include <string>
-
+#include<iostream>
+#include<string>
 using namespace std;
 
-int main() {
-	//changes by burhan
-	cout << "E- voting system";
+int main() 
+{
 	return 0;
 }
