@@ -254,60 +254,152 @@ public:
 
 };
 
-	class result
+class result
+{ 
+private:
+	election* electptr;
+public:
+	result(election* eptr = NULL)
 	{
-	private:
-		election* electptr;
-	public:
-		result(election* eptr = NULL)
-		{
-			electptr = eptr;
-		}
-		void resultadmin()
-		{
-			if (electptr == NULL)
-			{
-				cout << "No Election Data Available!" << endl;
-				return;
-			}
-			else if (!electptr->getisended())
-			{
-				cout << "Election is not ended yet." << endl;
-				return;
-			}
-			cout << "\n----Election Result-----\n";
-			cout << "Election Name:" << electptr->getname() << endl;
-			cout << "Total Candidates:" << electptr->getccount() << endl;
-		}
-	};
+		electptr = eptr;
+	}
 
-	class emanager
+	candidate getwinner() 
 	{
-	private:
-		localelection* lelection;
-		int lcount;
-	public:
-		emanager()
+		if (electptr == NULL || !electptr->getisended() || electptr->getccount() == 0) 
 		{
-			lelection = NULL;
-			lcount = 0;
+			return candidate();
 		}
-		void addlelect(localelection* e)
+
+		candidate winner = electptr->getcand(0);
+		int votes = winner.getvotes();
+
+		for (int i = 1; i < electptr->getccount(); i++) 
 		{
-			localelection* newe = new localelection[lcount + 1];
-			for (int i = 0; i < lcount; i++)
+			candidate cand = electptr->getcand(i);
+			if (cand.getvotes() > votes) 
 			{
-				newe[i] = lelection[i];
+				winner = cand;
+				votes = cand.getvotes();
 			}
-
-			newe[lcount] = *e;
-			delete[] lelection;
-			lelection = newe;
-			lcount++;
-
-			cout << "Local election Added Successfully!" << endl;
 		}
-	};
+		return winner;
+	}
+
+	void resultadmin()
+	{
+		if (electptr == NULL)
+		{
+			cout << "No Election Data Available!" << endl;
+			return;
+		}
+		else if (!electptr->getisended())
+		{
+			cout << "Election is not ended yet." << endl;
+			return;
+		}
+		cout << "\n----Election Result-----\n";
+		cout << "Election Name:" << electptr->getname() << endl;
+		cout << "Total Candidates:" << electptr->getccount() << endl;
+
+		cout << "\nVotes by Candidate:" << endl;
+		for (int i = 0; i < electptr->getccount(); i++) 
+		{
+			candidate cand = electptr->getcand(i);
+			cout << "Candidate ID: " << cand.getcid() << endl;
+			cout<< "Name: " << cand.getname() << endl;
+			cout<< "Party: " << cand.getparty() << endl;
+			cout<< "Votes: " << cand.getvotes() << endl;
+		}
+
+		candidate winner = getwinner();
+		if (winner.getcid() != 0) 
+		{
+			cout << "\nWinner: " << winner.getname()<< " (" << winner.getparty() << ") with "<< winner.getvotes() << " Votes." << endl;
+		}
+		else 
+		{
+			cout << "\nNo Winner Selected Yet!" << endl;
+		}
+	}
+};
+
+class emanager
+{
+private:
+	localelection* lelection;
+	int lcount;
+
+	nationalelection* nelection;
+	bool hasnat;
+public:
+	emanager()
+	{
+		lelection = NULL;
+		lcount = 0;
+		nelection = NULL;
+		hasnat = 0;
+	}
+
+	void addlelection(localelection* e)
+	{
+		localelection* newe = new localelection[lcount + 1];
+		for (int i = 0; i < lcount; i++)
+		{
+			newe[i] = lelection[i];
+		}
+
+		newe[lcount] = *e;
+		delete[] lelection;
+		lelection = newe;
+		lcount++;
+
+		cout << "Local election Added Successfully!" << endl;
+	}
+
+	void addnelection(nationalelection* e) {
+		if (hasnat) {
+			cout << "National Election Already Exists!" << endl;
+			return;
+		}
+
+		nelection = new nationalelection(*e);
+		hasnat = true;
+		cout << "National Election Added Successfully!" << endl;
+	}
+
+	void displayel() 
+	{
+		if (lcount == 0) 
+		{
+			cout << "No Local Elections Found." << endl;
+			return;
+		}
+		cout << "\n-----Local Elections-----" << endl;
+		for (int i = 0; i < lcount; i++) 
+		{
+			cout << i + 1 << ". City Code: " << lelection[i].getccode() << endl;
+			cout<< "Name: " << lelection[i].getname() << endl;
+			cout<< "Status: " << (lelection[i].getisstarted() ? "Started" : "Not Started") << endl;
+			cout<< "Ended: " << (lelection[i].getisended() ? "Yes" : "No") << endl;
+		}
+	}
+
+	void displayne() 
+	{
+		if (!hasnat) 
+		{
+			cout << "No National Election Found." << endl;
+			return;
+		}
+
+		cout << "\n-----National Election-----" << endl;
+		cout << "Name: " << nelection->getname() << endl;
+		cout << "Status: " << (nelection->getisstarted() ? "Started" : "Not Started") << endl;
+		cout<< "Ended: " << (nelection->getisended() ? "Yes" : "No") << endl;
+	}
+
+};
 	class user {
 	protected:
 		string username;
