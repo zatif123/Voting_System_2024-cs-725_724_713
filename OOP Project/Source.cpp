@@ -188,6 +188,29 @@ public:
 		cout << "Local election Added Successfully!" << endl;
 	}
 };
+class user {
+protected:
+	string username;
+	string password;
+
+public:
+	user(const string& uname = "", const string& pwd = "") {
+		username = uname;
+		password = pwd;
+	}
+
+	virtual ~user() {
+	}
+
+	bool login(const string& uname, const string& pwd) {
+		return (username == uname) && (password == pwd);
+	}
+
+	string getusername() const {
+		return username;
+	}
+};
+
 
 int main() 
 {
