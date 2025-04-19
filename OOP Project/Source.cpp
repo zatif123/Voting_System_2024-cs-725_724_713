@@ -133,6 +133,62 @@ public:
 		return ccode;
 	}
 };
+
+class result
+{
+private:
+	election* electptr;
+public:
+	result(election* eptr = NULL)
+	{
+		electptr = eptr;
+	}
+	void resultadmin()
+	{
+		if (electptr == NULL)
+		{
+			cout << "No Election Data Available!" << endl;
+			return;
+		}
+		else if (!electptr->getisended())
+		{
+			cout << "Election is not ended yet." << endl;
+			return;
+		}
+		cout << "\n----Election Result-----\n";
+		cout << "Election Name:" << electptr->getname()<<endl;
+		cout << "Total Candidates:" << electptr->getccount() << endl;
+	}
+};
+
+class emanager
+{
+private:
+	locale* lelection;
+	int lcount;
+public:
+	emanager()
+	{
+		lelection = NULL;
+		lcount = 0;
+	}
+	void addlelect(locelect* e)
+	{
+		locelect* newe = new locelect[lcount + 1];
+		for (int i = 0; i < lcount; i++)
+		{
+			newe[i] = lelection[i];
+		}
+
+		newe[lcount] = *e;
+		delete[] lelection;
+		lelection = newe;
+		lcount++;
+
+		cout << "Local election Added Successfully!" << endl;
+	}
+};
+
 int main() 
 {
 
