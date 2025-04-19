@@ -55,6 +55,10 @@ public:
 		return (username == uname) && (password == pwd);
 
 	}
+	void viewvotes() {
+		cout << "You hae received " << votes << "votes." << endl;
+	}
+
 
 };
 class election {
@@ -68,8 +72,9 @@ protected:
 public:
 	election(string n = "", string r = "", bool s = false, bool e = false) :
 		name(n), rules(r), isstarted(s), isended(e)
-	{}
-	 virtual ~election() {
+	{
+	}
+	virtual ~election() {
 		delete[] cands;
 	}
 	string getname() const {
@@ -93,15 +98,15 @@ public:
 	}
 
 	virtual void dispdetails() = 0;
-	void addand(candidate* cptr) {
+	void addcand(candidate* cptr) {
 		if (isstarted) {
 			cout << " Cannot add candidate after election has started." << endl;
 			return;
 		}
-		candidate* newcands = new candidate[ccount+1];
+		candidate* newcands = new candidate[ccount + 1];
 		for (int i = 0; i < ccount; i++) {
 			newcands[i] = cands[i];
-		
+
 		}
 		newcands[ccount] = *cptr;
 
@@ -110,15 +115,34 @@ public:
 		ccount++;
 
 	}
+	void start() {
+		if (ccount == 0) {
+			cout << "Cannot start Election with no candiadates." << endl;
+			return;
+		}
+		isstarted = true;
+		cout << "Election " << name << "has started." << endl;
+
+	}
+	void end() {
+		if (!isstarted) {
+			cout << "Cannot end an electionthat hasnot started." << endl;
+			return;
+		}
+		isended = true;
+		cout << "Election " << name << "has ended." << endl;
+		calcresult();
+	}
+	virtual void calcresult() = 0;
 
 };
 
 
-class locelect :public election {
+class localelection :public election {
 private:
 	int ccode;
 public:
-	locelect(string name="", string r=" ",int city= 0) : election(name, r) {
+	localelection(string name = "", string r = " ", int city = 0) : election(name, r) {
 		this->ccode = city;
 	}
 	void dispdetails() {
@@ -128,92 +152,189 @@ public:
 		cout << "Rules: " << rules << endl;
 		cout << "Status: " << (getisstarted() ? "Started" : "Not Started") << endl;
 		cout << "Ended : " << (getisended() ? "Yes" : "No") << endl;
+		cout << "Number of Candidates: " << getccount() << endl;
+
+		if (getccount() > 0) {
+			cout << "\n Candidates:" << endl;
+			for (int i = 0;i < getccount();i++){
+				candidate cand = getcand(i);
+				cout<<i+1<<" . Id: <<cand.getcid()"<<", Name:"<<cand.getname()
+					<< ", Party:" << cand.getparty() << endl;
+
+			}
+		}
+	}
+	void calcresult() {
+		if (!getisended()) {
+			cout << "Cannot calculate results for an election that hasn't ended." << endl;
+			return;
+
+		}
+		cout << "calculating results for local election in city code " << ccode << "...." << endl;
+
+		int mvotes = -1;
+		candidate winner;
+		bool haswinner = false;
+
+		for (int i = 0; i < getccount(); i++) {
+			candidate cand = getcand(i);
+			if (cand.getvotes() > mvotes) {
+				mvotes = cand.getvotes();
+				winner = cand;
+				haswinner = true;
+			}
+		}
+		if (haswinner) {
+			cout << "Winner: " << winner.getname() <<"with "<<mvotes<< "votes."<< endl;
+		}
+		else {
+			cout << "No Winner Determined." << endl;
+		}
 	}
 	int getccode() const {
 		return ccode;
 	}
 };
-
-class result
-{
-private:
-	election* electptr;
+class nationalelection :public election {
 public:
-	result(election* eptr = NULL)
-	{
-		electptr = eptr;
-	}
-	void resultadmin()
-	{
-		if (electptr == NULL)
+	nationalelection(string name = "", string r = " ") : election(name, r) 
+	{}
+	void dispdetails() {
+		cout << "\n=====National Election Details=====" << endl;
+		cout << "Election Name: " << getname() << endl;
+		cout << "Rules:" << rules << endl;
+		cout << "Status:" <<(getisstarted()? "Started" : "Not Started") << endl;
+		cout << "Ended:" <<(getisended() ?"Yes" : "No") << endl;
+		cout << "Number of Candidates:" <<getccount() << endl;
+		if (getccount()>0)
 		{
-			cout << "No Election Data Available!" << endl;
+			cout << "\nCandidates:" << endl;
+			for (int i = 0; i < getccount(); i++) {
+				candidate cand = getcand(i);
+				cout << i + 1 << ".ID: " << cand.getcid()
+					<< ",Name:" << cand.getname()
+					<< ",Party:" << cand.getparty() << endl;
+
+
+			}
+		}
+	}
+	void calcresult()  {
+		if (!getisended()) 
+		{
+			cout << "Cannot calculate results for an election that hasn't ended." << endl;
 			return;
 		}
-		else if (!electptr->getisended())
-		{
-			cout << "Election is not ended yet." << endl;
-			return;
-		}
-		cout << "\n----Election Result-----\n";
-		cout << "Election Name:" << electptr->getname()<<endl;
-		cout << "Total Candidates:" << electptr->getccount() << endl;
-	}
-};
 
-class emanager
-{
-private:
-	locale* lelection;
-	int lcount;
-public:
-	emanager()
-	{
-		lelection = NULL;
-		lcount = 0;
-	}
-	void addlelect(locelect* e)
-	{
-		locelect* newe = new locelect[lcount + 1];
-		for (int i = 0; i < lcount; i++)
+		cout << "Calculating results for national election..." << endl;
+
+		int mvotes = -1;
+		candidate winner;
+		bool hasWinner = false;
+
+		for (int i = 0; i < getccount(); i++)
 		{
-			newe[i] = lelection[i];
+			candidate cand = getcand(i);
+			if (cand.getvotes() > mvotes) {
+				mvotes = cand.getvotes();
+				winner = cand;
+				hasWinner = true;
+			}
 		}
 
-		newe[lcount] = *e;
-		delete[] lelection;
-		lelection = newe;
-		lcount++;
-
-		cout << "Local election Added Successfully!" << endl;
-	}
-};
-class user {
-protected:
-	string username;
-	string password;
-
-public:
-	user(const string& uname = "", const string& pwd = "") {
-		username = uname;
-		password = pwd;
+		if (hasWinner)
+		{
+			cout << "Winner: " <<winner.getname() << " with" << mvotes << " votes." << endl;
+		}
+		else 
+		{
+			cout << "No winner determined." << endl;
+		}
 	}
 
-	virtual ~user() {
-	}
-
-	bool login(const string& uname, const string& pwd) {
-		return (username == uname) && (password == pwd);
-	}
-
-	string getusername() const {
-		return username;
-	}
 };
 
+	class result
+	{
+	private:
+		election* electptr;
+	public:
+		result(election* eptr = NULL)
+		{
+			electptr = eptr;
+		}
+		void resultadmin()
+		{
+			if (electptr == NULL)
+			{
+				cout << "No Election Data Available!" << endl;
+				return;
+			}
+			else if (!electptr->getisended())
+			{
+				cout << "Election is not ended yet." << endl;
+				return;
+			}
+			cout << "\n----Election Result-----\n";
+			cout << "Election Name:" << electptr->getname() << endl;
+			cout << "Total Candidates:" << electptr->getccount() << endl;
+		}
+	};
 
-int main() 
-{
+	class emanager
+	{
+	private:
+		localelection* lelection;
+		int lcount;
+	public:
+		emanager()
+		{
+			lelection = NULL;
+			lcount = 0;
+		}
+		void addlelect(localelection* e)
+		{
+			localelection* newe = new localelection[lcount + 1];
+			for (int i = 0; i < lcount; i++)
+			{
+				newe[i] = lelection[i];
+			}
 
-	return 0;
-}
+			newe[lcount] = *e;
+			delete[] lelection;
+			lelection = newe;
+			lcount++;
+
+			cout << "Local election Added Successfully!" << endl;
+		}
+	};
+	class user {
+	protected:
+		string username;
+		string password;
+
+	public:
+		user(const string& uname = "", const string& pwd = "") {
+			username = uname;
+			password = pwd;
+		}
+
+		virtual ~user() {
+		}
+
+		bool login(const string& uname, const string& pwd) {
+			return (username == uname) && (password == pwd);
+		}
+
+		string getusername() const {
+			return username;
+		}
+	};
+
+
+	int main()
+	{
+
+		return 0;
+	}
+
