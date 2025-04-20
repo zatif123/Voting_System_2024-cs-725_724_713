@@ -322,6 +322,32 @@ public:
 			cout << "\nNo Winner Selected Yet!" << endl;
 		}
 	}
+	void resultvoter() 
+	{
+		if (electptr == NULL)
+		{
+			cout << "No Election Data Available!" << endl;
+			return;
+		}
+		else if (!electptr->getisended())
+		{
+			cout << "Election is not ended yet." << endl;
+			return;
+		}
+
+		cout << "\n-----Election Results-----" << endl;
+		cout << "Election Name: " << electptr->getname() << endl;
+
+		candidate winner = getwinner();
+		if (winner.getcid() != 0)
+		{
+			cout << "\nWinner: " << winner.getname() << " (" << winner.getparty() << ") with " << winner.getvotes() << " Votes." << endl;
+		}
+		else
+		{
+			cout << "\nNo Winner Selected Yet!" << endl;
+		}
+	}
 };
 
 class emanager
@@ -332,6 +358,9 @@ private:
 
 	nationalelection* nelection;
 	bool hasnat;
+
+	candidate* cand;
+	int ccount;
 public:
 	emanager()
 	{
@@ -339,6 +368,8 @@ public:
 		lcount = 0;
 		nelection = NULL;
 		hasnat = 0;
+		cand = NULL;
+		ccount = 0;
 	}
 
 	void addlelection(localelection* e)
@@ -399,95 +430,139 @@ public:
 		cout<< "Ended: " << (nelection->getisended() ? "Yes" : "No") << endl;
 	}
 
-};
-	class user {
-	protected:
-		string username;
-		string password;
-
-	public:
-		user(const string& uname = "", const string& pwd = "") {
-			username = uname;
-			password = pwd;
-		}
-
-		virtual ~user() {
-		}
-
-		bool login(const string& uname, const string& pwd) {
-			return (username == uname) && (password == pwd);
-		}
-
-		string getusername() const {
-			return username;
-		}
-	};
-	
-	class admin : public user {
-	public:
-		admin() : user() 
-		{
-			username = "admin";
-			password = "admin123";
-		}
-
-		admin(const string& uname, const string& pwd)
-			: user(uname, pwd)
-		{
-		}
-
-		void creel(emgr* mgr) 
-		   {
-			int choice;
-			cout << "\n===== Create Election =====" << endl;
-			cout << "1. Local Election" << endl;
-			cout << "2. National Election" << endl;
-			cout << "3. Exit" << endl;
-			cout << "Enter your choice: ";
-			cin >> choice;
-
-			if (choice == 1) 
-			{
-				string name;
-				string rules;
-				int ccode;
-
-				cout << "Enter city code: ";
-				cin >> ccode;
-				cin.ignore();
-
-				cout << "Enter election name: ";
-				getline(cin, name);
-
-				cout << "Enter election rules: ";
-				getline(cin, rules);
-
-				locelect* elect = new locelect(name, rules, ccode);
-				mgr->addlelect(elect);
-				delete elect; 
-			}
-			else if (choice == 2) {
-				string name;
-				string rules;
-
-				cin.ignore();
-
-				cout << "Enter election name: ";
-				getline(cin, name);
-
-				cout << "Enter election rules: ";
-				getline(cin, rules);
-
-				natelect* elect = new natelect(name, rules);
-				mgr->addnelect(elect);
-				delete elect; 
-			}
-		}
-
-
-	int main()
+	void addcandidate(candidate* c) 
 	{
+		candidate* newcand = new candidate[ccount + 1];
 
-		return 0;
+		for (int i = 0; i < ccount; i++) 
+		{
+			newcand[i] = cand[i];
+		}
+
+		newcand[ccount] = *c;
+
+		delete[] cand;
+		cand = newcand;
+		ccount++;
+
+		cout << "Candidate Added Successfully!" << endl;
 	}
+
+	candidate* findcand(int cid) 
+	{
+		for (int i = 0; i < ccount; i++) 
+		{
+			if (cand[i].getcid() == cid) 
+			{
+				return &cand[i];
+			}
+		}
+		return NULL;
+	}
+	candidate* findcandbyuname(const string& uname) 
+	{
+		for (int i = 0; i < ccount; i++) 
+		{
+			if (cand[i].getusername() == uname) 
+			{
+				return &cand[i];
+			}
+		}
+		return nullptr;
+	}
+};
+class user {
+protected:
+	string username;
+	string password;
+
+public:
+	user(const string& uname = "", const string& pwd = "") 
+	{
+		username = uname;
+		password = pwd;
+	}
+
+	virtual ~user() {
+	}
+
+	bool login(const string& uname, const string& pwd) 
+	{
+		return (username == uname) && (password == pwd);
+	}
+
+	string getusername() const 
+	{
+		return username;
+	}
+};
+	
+class admin : public user
+{
+public:
+	admin() : user()
+	{
+		username = "admin";
+		password = "admin123";
+	}
+
+	admin(const string& uname, const string& pwd) : user(uname, pwd)
+	{
+	}
+
+	void creel(emanager* mgr)
+	{
+		int choice;
+		cout << "\n===== Create Election =====" << endl;
+		cout << "1. Local Election" << endl;
+		cout << "2. National Election" << endl;
+		cout << "3. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		if (choice == 1)
+		{
+			string name;
+			string rules;
+			int ccode;
+
+			cout << "Enter city code: ";
+			cin >> ccode;
+			cin.ignore();
+
+			cout << "Enter election name: ";
+			getline(cin, name);
+
+			cout << "Enter election rules: ";
+			getline(cin, rules);
+
+			localelection* elect = new localelection(name, rules, ccode);
+			mgr->addlelection(elect);
+			delete elect;
+		}
+		else if (choice == 2)
+		{
+			string name;
+			string rules;
+
+			cin.ignore();
+
+			cout << "Enter election name: ";
+			getline(cin, name);
+
+			cout << "Enter election rules: ";
+			getline(cin, rules);
+
+			nationalelection* elect = new nationalelection(name, rules);
+			mgr->addnelection(elect);
+			delete elect;
+		}
+	}
+};
+
+int main()
+{
+
+	return 0;
+}
 
