@@ -422,6 +422,67 @@ public:
 			return username;
 		}
 	};
+	
+	class admin : public user {
+	public:
+		admin() : user() 
+		{
+			username = "admin";
+			password = "admin123";
+		}
+
+		admin(const string& uname, const string& pwd)
+			: user(uname, pwd)
+		{
+		}
+
+		void creel(emgr* mgr) 
+		   {
+			int choice;
+			cout << "\n===== Create Election =====" << endl;
+			cout << "1. Local Election" << endl;
+			cout << "2. National Election" << endl;
+			cout << "3. Exit" << endl;
+			cout << "Enter your choice: ";
+			cin >> choice;
+
+			if (choice == 1) 
+			{
+				string name;
+				string rules;
+				int ccode;
+
+				cout << "Enter city code: ";
+				cin >> ccode;
+				cin.ignore();
+
+				cout << "Enter election name: ";
+				getline(cin, name);
+
+				cout << "Enter election rules: ";
+				getline(cin, rules);
+
+				locelect* elect = new locelect(name, rules, ccode);
+				mgr->addlelect(elect);
+				delete elect; 
+			}
+			else if (choice == 2) {
+				string name;
+				string rules;
+
+				cin.ignore();
+
+				cout << "Enter election name: ";
+				getline(cin, name);
+
+				cout << "Enter election rules: ";
+				getline(cin, rules);
+
+				natelect* elect = new natelect(name, rules);
+				mgr->addnelect(elect);
+				delete elect; 
+			}
+		}
 
 
 	int main()
