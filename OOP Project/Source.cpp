@@ -2,6 +2,16 @@
 #include<string>
 using namespace std;
 
+class candidate;
+class election;
+class locelect;
+class natelect;
+class result;
+class emanager;
+class voter;
+class admin;
+
+
 class candidate {
 private:
 	string name;
@@ -59,7 +69,7 @@ public:
 		cout << "You hae received " << votes << "votes." << endl;
 	}
 
-
+	void viewresult(emanager* mgr);
 };
 class election {
 protected:
@@ -80,16 +90,16 @@ public:
 	string getname() const {
 		return name;
 	}
-	bool getisstarted() const {
+	bool getisstarted()const {
 		return isstarted;
 	}
-	bool getisended() const {
+	bool getisended()const {
 		return isended;
 	}
-	int getccount() const {
+	int getccount()const {
 		return ccount;
 	}
-	candidate getcand(int index) {
+	candidate getcand(int index)const {
 		if (index >= 0 && index < ccount) {
 			return cands[index];
 		}
@@ -98,6 +108,7 @@ public:
 	}
 
 	virtual void dispdetails() = 0;
+
 	void addcand(candidate* cptr) {
 		if (isstarted) {
 			cout << " Cannot add candidate after election has started." << endl;
@@ -559,6 +570,31 @@ public:
 		}
 	}
 };
+void candidate::viewresult(emanager* mgr) {
+	string cat = getcat();
+	int cid = getcid();
+
+	if (cat == "local") {
+		locelect* elect = mgr->findlelect(getccode());
+		if (elect != nullptr && elect->getisended()) {
+			result res(elect);
+			cout << "Local election results for your candidacy:" << endl;
+		}
+		else {
+			cout << "No ended election found for your city code." << endl;
+		}
+	}
+	else if (cat == "national") {
+		natelect* elect = mgr->getnelect();
+		if (elect != nullptr && elect->getisended()) {
+			result res(elect);
+			cout << "National election results for your candidacy:" << endl;
+		}
+		else {
+			cout << "No ended national election found." << endl;
+		}
+	}
+}
 
 int main()
 {
