@@ -359,6 +359,56 @@ public:
 			cout << "\nNo Winner Selected Yet!" << endl;
 		}
 	}
+	void resultcandidate(int cid) 
+	{
+		if (electptr == NULL)
+		{
+			cout << "No Election Data Available!" << endl;
+			return;
+		}
+		else if (!electptr->getisended())
+		{
+			cout << "Election is not ended yet." << endl;
+			return;
+		}
+
+		candidate target;
+		bool found = false;
+		for (int i = 0; i < electptr->getccount(); i++) 
+		{
+			candidate cand = electptr->getcand(i);
+			if (cand.getcid() == cid) 
+			{
+				target = cand;
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) 
+		{
+			cout << "Candidate not found in this election." << endl;
+			return;
+		}
+
+		cout << "\n-----Your Election Results-----" << endl;
+		cout << "Election Name: " << electptr->getname() << endl;
+		cout << "Your Votes: " << target.getvotes() << endl;
+
+		candidate winner = getwinner();
+		if (winner.getcid() == cid) 
+		{
+			cout << "Congratulations! You Won the Election." << endl;
+		}
+		else if (winner.getcid() != 0) 
+		{
+			cout << "Winner: " << winner.getname()<< " (" << winner.getparty() << ") with "<< winner.getvotes() << " Votes." << endl;
+		}
+		else 
+		{
+			cout << "No Winner Determined." << endl;
+		}
+	}
 };
 
 class emanager
@@ -439,6 +489,27 @@ public:
 		cout << "Name: " << nelection->getname() << endl;
 		cout << "Status: " << (nelection->getisstarted() ? "Started" : "Not Started") << endl;
 		cout<< "Ended: " << (nelection->getisended() ? "Yes" : "No") << endl;
+	}
+
+	localelection* findlelect(int ccode)
+	{
+		for (int i = 0; i < lcount; i++)
+		{
+			if (lelection[i].getccode() == ccode)
+			{
+				return &lelection[i];
+			}
+		}
+		return NULL;
+	}
+
+	nationalelection* getnelect()
+	{
+		if (hasnat)
+		{
+			return nelection;
+		}
+		return NULL;
 	}
 
 	void addcandidate(candidate* c) 
@@ -570,27 +641,34 @@ public:
 		}
 	}
 };
-void candidate::viewresult(emanager* mgr) {
+void candidate::viewresult(emanager* mgr) 
+{
 	string cat = getcat();
 	int cid = getcid();
 
-	if (cat == "local") {
-		locelect* elect = mgr->findlelect(getccode());
-		if (elect != nullptr && elect->getisended()) {
+	if (cat == "local") 
+	{
+		localelection* elect = mgr->findlelect(getcode());
+		if (elect != nullptr && elect->getisended()) 
+		{
 			result res(elect);
 			cout << "Local election results for your candidacy:" << endl;
 		}
-		else {
+		else 
+		{
 			cout << "No ended election found for your city code." << endl;
 		}
 	}
-	else if (cat == "national") {
-		natelect* elect = mgr->getnelect();
-		if (elect != nullptr && elect->getisended()) {
+	else if (cat == "national") 
+	{
+		nationalelection* elect = mgr->getnelect();
+		if (elect != nullptr && elect->getisended()) 
+		{
 			result res(elect);
 			cout << "National election results for your candidacy:" << endl;
 		}
-		else {
+		else 
+		{
 			cout << "No ended national election found." << endl;
 		}
 	}
