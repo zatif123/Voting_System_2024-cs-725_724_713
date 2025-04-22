@@ -460,7 +460,7 @@ public:
 		cout << "National Election Added Successfully!" << endl;
 	}
 
-	void displayel() 
+	void displayle() 
 	{
 		if (lcount == 0) 
 		{
@@ -591,7 +591,86 @@ public:
 	admin(const string& uname, const string& pwd) : user(uname, pwd)
 	{
 	}
+	void createcand(emanager* mgr) 
+	{
+		string name;
+		int ccode;
+		int cid;
+		string username;
+		string password;
+		string party;
+		string category;
 
+		cout << "\n===== Create Candidate =====" << endl;
+
+		cin.ignore();
+
+		cout << "Enter candidate name: ";
+		getline(cin, name);
+
+		cout << "Enter city code: ";
+		cin >> ccode;
+
+		cout << "Enter candidate ID: ";
+		cin >> cid;
+
+		cin.ignore();
+
+		cout << "Enter username: ";
+		getline(cin, username);
+
+		cout << "Enter password: ";
+		getline(cin, password);
+
+		cout << "Enter party name: ";
+		getline(cin, party);
+
+		cout << "Enter category (local/national): ";
+		getline(cin, category);
+
+		candidate* cptr = new candidate(name, ccode, cid, username, password, party, category);
+		mgr->addcand(cptr);
+		delete cptr;	
+	}
+	void viewel(emanager* mgr) 
+	{
+		int choice;
+		cout << "\n===== View Elections =====" << endl;
+		cout << "1. Local Elections" << endl;
+		cout << "2. National Elections" << endl;
+		cout << "3. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		if (choice == 1) 
+		{
+			mgr->displayle();
+		}
+		else if (choice == 2) 
+		{
+			mgr->dispayne();
+		}
+	}
+
+	void viewcands(emanager* mgr) 
+	{
+		int choice;
+		cout << "\n===== View Candidates =====" << endl;
+		cout << "1. Local Candidates" << endl;
+		cout << "2. National Candidates" << endl;
+		cout << "3. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		if (choice == 1) 
+		{
+			mgr->displaycand("local");
+		}
+		else if (choice == 2) 
+		{
+			mgr->displaycand("national");
+		}
+	}
 	void creel(emanager* mgr)
 	{
 		int choice;
