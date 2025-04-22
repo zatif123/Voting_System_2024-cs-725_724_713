@@ -490,6 +490,29 @@ public:
 		cout << "Status: " << (nelection->getisstarted() ? "Started" : "Not Started") << endl;
 		cout<< "Ended: " << (nelection->getisended() ? "Yes" : "No") << endl;
 	}
+	void displaycand(const string& cat) {
+		bool found = false;
+
+		cout << "\n===== " << cat << " Candidates =====" << endl;
+		for (int i = 0; i < ccount; i++) {
+			if (cand[i].getcat() == cat) {
+				cout << "ID: " << cand[i].getcid()
+					<< ", Name: " << cand[i].getname()
+					<< ", Party: " << cand[i].getparty();
+
+				if (cat == "local") {
+					cout << ", City Code: " << cand[i].getcode();
+				}
+
+				cout << endl;
+				found = true;
+			}
+		}
+
+		if (!found) {
+			cout << "No " << cat << " candidates found." << endl;
+		}
+	}
 
 	localelection* findlelect(int ccode)
 	{
@@ -629,7 +652,7 @@ public:
 		getline(cin, category);
 
 		candidate* cptr = new candidate(name, ccode, cid, username, password, party, category);
-		mgr->addcand(cptr);
+		mgr->addcandidate(cptr);
 		delete cptr;	
 	}
 	void viewel(emanager* mgr) 
@@ -648,7 +671,7 @@ public:
 		}
 		else if (choice == 2) 
 		{
-			mgr->dispayne();
+			mgr->displayne();
 		}
 	}
 
