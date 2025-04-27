@@ -490,18 +490,22 @@ public:
 		cout << "Status: " << (nelection->getisstarted() ? "Started" : "Not Started") << endl;
 		cout<< "Ended: " << (nelection->getisended() ? "Yes" : "No") << endl;
 	}
-	void displaycand(const string& cat) {
+	void displaycand(const string& cat) 
+	{
 		bool found = false;
 
 		cout << "\n===== " << cat << " Candidates =====" << endl;
-		for (int i = 0; i < ccount; i++) {
-			if (cand[i].getcat() == cat) {
-				cout << "ID: " << cand[i].getcid()
-					<< ", Name: " << cand[i].getname()
-					<< ", Party: " << cand[i].getparty();
+		for (int i = 0; i < ccount; i++) 
+		{
+			if (cand[i].getcat() == cat) 
+			{
+				cout << "ID: " << cand[i].getcid() << endl;
+				cout<< "Name: " << cand[i].getname() << endl;
+				cout<< "Party: " << cand[i].getparty() << endl;;
 
-				if (cat == "local") {
-					cout << ", City Code: " << cand[i].getcode();
+				if (cat == "local") 
+				{
+					cout << "City Code: " << cand[i].getcode();
 				}
 
 				cout << endl;
@@ -575,6 +579,131 @@ public:
 		}
 		return nullptr;
 	}
+
+	void startelection() 
+	{
+		int choice;
+		cout << "\n-----Start Election-----" << endl;
+		cout << "1. Local Election" << endl;
+		cout << "2. National Election" << endl;
+		cout << "3. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		if (choice == 1) 
+		{
+			int ccode;
+			cout << "Enter city code: ";
+			cin >> ccode;
+
+			localelection* elect = findlelect(ccode);
+			if (elect == NULL) 
+			{
+				cout << "No Election Found for city code " << ccode << endl;
+				return;
+			}
+
+			if (elect->getisstarted()) 
+			{
+				cout << "Election has already started." << endl;
+				return;
+			}
+
+			if (elect->getccount() == 0) 
+			{
+				cout << "Cannot start election with no candidates." << endl;
+				return;
+			}
+
+			elect->start();
+		}
+		else if (choice == 2) 
+		{
+			nationalelection* elect = getnelect();
+			if (elect == NULL) 
+			{
+				cout << "No National Election Found." << endl;
+				return;
+			}
+
+			if (elect->getisstarted()) 
+			{
+				cout << "Election has already started." << endl;
+				return;
+			}
+
+			if (elect->getccount() == 0) 
+			{
+				cout << "Cannot start election with no candidates." << endl;
+				return;
+			}
+
+			elect->start();
+		}
+	}
+
+	void endelection() 
+	{
+		int choice;
+		cout << "\n-----End Election-----" << endl;
+		cout << "1. Local Election" << endl;
+		cout << "2. National Election" << endl;
+		cout << "3. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		if (choice == 1) 
+		{
+			int ccode;
+			cout << "Enter city code: ";
+			cin >> ccode;
+
+			localelection* elect = findlelect(ccode);
+			if (elect == NULL) 
+			{
+				cout << "No Election Found for city code " << ccode << endl;
+				return;
+			}
+
+			if (!elect->getisstarted()) 
+			{
+				cout << "Election has not started yet." << endl;
+				return;
+			}
+
+			if (elect->getisended()) 
+			{
+				cout << "Election has already ended." << endl;
+				return;
+			}
+
+			elect->end();
+		}
+		else if (choice == 2) 
+		{
+			nationalelection* elect = getnelect();
+			if (elect == NULL) 
+			{
+				cout << "No National Election found." << endl;
+				return;
+			}
+
+			if (!elect->getisstarted()) 
+			{
+				cout << "Election has not started yet." << endl;
+				return;
+			}
+
+			if (elect->getisended()) 
+			{
+				cout << "Election has already ended." << endl;
+				return;
+			}
+
+			elect->end();
+		}
+	}
+
 };
 class user {
 protected:
