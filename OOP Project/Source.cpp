@@ -905,9 +905,91 @@ void candidate::viewresult(emanager* mgr)
 	}
 }
 
-int main()
-{
+int main() {
+	emgr* mgr = new emgr();
+	admin* adm = new admin();
 
+	cout << "===== Online Voting System =====" << endl;
+	cout << "Welcome to the Online Voting System!" << endl;
+	cout << "This system allows for managing elections, candidates, and voters." << endl;
+	cout << "Default admin credentials: username: admin, password: admin123" << endl;
+	cout << "===============================" << endl;
+
+	bool running = true;
+	while (running) {
+		cout << "\n===== Online Voting System =====" << endl;
+		cout << "1. Admin" << endl;
+		cout << "2. Candidate" << endl;
+		cout << "3. Voter" << endl;
+		cout << "4. Exit" << endl;
+		cout << "Enter your choice: ";
+
+		int choice;
+		cin >> choice;
+
+		switch (choice) {
+		case 1: {
+			string uname, pwd;
+			cout << "\n===== Admin Login =====" << endl;
+			cout << "Username: ";
+			cin >> uname;
+			cout << "Password: ";
+			cin >> pwd;
+
+			if (adm->login(uname, pwd)) {
+				cout << "Login successful!" << endl;
+
+				bool arun = true;
+				while (arun) {
+					cout << "\n===== Admin Menu =====" << endl;
+					cout << "1. Create Election" << endl;
+					cout << "2. Create Candidate" << endl;
+					cout << "3. Exit" << endl;
+					cout << "Enter your choice: ";
+
+					int achoice;
+					cin >> achoice;
+
+					switch (achoice) {
+					case 1:
+						adm->creel(mgr);
+						break;
+					case 2:
+						adm->crecand(mgr);
+						break;
+					case 3:
+						arun = false;
+						cout << "Returning to main menu." << endl;
+						break;
+					default:
+						cout << "Invalid choice. Please try again." << endl;
+					}
+				}
+			}
+			else {
+				cout << "Invalid username or password." << endl;
+			}
+			break;
+		}
+		case 2: {
+			cout << "Candidate login functionality will be implemented in the next version." << endl;
+			break;
+		}
+		case 3: {
+			cout << "Voter functionality will be implemented in the next version." << endl;
+			break;
+		}
+		case 4:
+			running = false;
+			cout << "Exiting system. Goodbye!" << endl;
+			break;
+		default:
+			cout << "Invalid choice. Please try again." << endl;
+		}
+	}
+
+	delete mgr;
+	delete adm;
 	return 0;
 }
 
