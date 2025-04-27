@@ -906,7 +906,7 @@ void candidate::viewresult(emanager* mgr)
 }
 
 int main() {
-	emgr* mgr = new emgr();
+	emanager* mgr = new emanager();
 	admin* adm = new admin();
 
 	cout << "===== Online Voting System =====" << endl;
@@ -955,7 +955,7 @@ int main() {
 						adm->creel(mgr);
 						break;
 					case 2:
-						adm->crecand(mgr);
+						adm->createcand(mgr);
 						break;
 					case 3:
 						arun = false;
@@ -972,9 +972,54 @@ int main() {
 			break;
 		}
 		case 2: {
-			cout << "Candidate login functionality will be implemented in the next version." << endl;
+			string uname, pwd;
+			cout << "\n===== Candidate Login =====" << endl;
+			cout << "Username: ";
+			cin >> uname;
+			cout << "Password: ";
+			cin >> pwd;
+
+			candidate* cptr = mgr->findcandbyuname(uname);
+			if (cptr != nullptr && cptr->login(uname, pwd)) {
+				cout << "Login successful!" << endl;
+
+				bool crun = true;
+				while (crun) {
+					cout << "\n===== Candidate Menu =====" << endl;
+					cout << "1. View Info" << endl;
+					cout << "2. View Votes Received" << endl;
+					cout << "3. View Result" << endl;
+					cout << "4. Exit" << endl;
+					cout << "Enter your choice: ";
+
+					int cchoice;
+					cin >> cchoice;
+
+					switch (cchoice) {
+					case 1:
+						cptr->disinfo();
+						break;
+					case 2:
+						cptr->viewvotes();
+						break;
+					case 3:
+						cptr->viewresult(mgr);
+						break;
+					case 4:
+						crun = false;
+						cout << "Returning to main menu." << endl;
+						break;
+					default:
+						cout << "Invalid choice. Please try again." << endl;
+					}
+				}
+			}
+			else {
+				cout << "Invalid username or password." << endl;
+			}
 			break;
 		}
+		
 		case 3: {
 			cout << "Voter functionality will be implemented in the next version." << endl;
 			break;
