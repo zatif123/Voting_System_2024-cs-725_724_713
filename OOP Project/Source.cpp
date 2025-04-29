@@ -580,6 +580,208 @@ public:
 		return nullptr;
 	}
 
+	candidate* geteligiblecands(const string& cat, int ccode, int& count) 
+	{
+		count = 0;
+		for (int i = 0; i < ccount; i++) 
+		{
+			if (cand[i].getcat() == cat) 
+			{
+				if (cat == "local") 
+				{
+					if (cand[i].getcode() == ccode) 
+					{
+						count++;
+					}
+				}
+				else 
+				{
+					count++;
+				}
+			}
+		}
+
+		if (count == 0) 
+		{
+			return NULL;
+		}
+		
+		candidate* ecand = new candidate[count];
+		int index = 0;
+
+		for (int i = 0; i < ccount; i++) 
+		{
+			if (cand[i].getcat() == cat) 
+			{
+				if (cat == "local") 
+				{
+					if (cand[i].getcode() == ccode) 
+					{
+						ecand[index++] = cand[i];
+					}
+				}
+				else 
+				{
+					ecand[index++] = cand[i];
+				}
+			}
+		}
+
+		return ecand;
+	}
+
+	void addctoe() 
+	{
+		int choice;
+		cout << "\n-----Add Candidates to Election-----" << endl;
+		cout << "1. Local Election" << endl;
+		cout << "2. National Election" << endl;
+		cout << "3. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		if (choice == 1) 
+		{
+			int ccode;
+			cout << "Enter city code: ";
+			cin >> ccode;
+
+			localelection* elect = findlelect(ccode);
+			if (elect == NULL) 
+			{
+				cout << "No Election Found for City Code " << ccode << endl;
+				return;
+			}
+
+			if (elect->getisstarted()) 
+			{
+				cout << "Cannot add Candidates to an Election that has already Started!" << endl;
+				return;
+			}
+
+			int count;
+			candidate* ecands = geteligiblecands("local", ccode, count);
+
+			if (count == 0) 
+			{
+				cout << "No Eligible Candidates found for this City Code." << endl;
+				return;
+			}
+
+			cout << "\nEligible Candidates:" << endl;
+			for (int i = 0; i < count; i++) 
+			{
+				cout << i + 1 << ". ID: " << ecands[i].getcid() << endl;
+				cout << "Name: " << ecands[i].getname() << endl;
+				cout<< "Party: " << ecands[i].getparty() << endl;
+			}
+
+			int cidx;
+			char cadd = 'y';
+
+			while (cadd == 'y' || cadd == 'Y') 
+			{
+				cout << "Enter candidate number to add (1-" << count << ") or -1 to exit: ";
+				int input;
+				cin >> input;
+
+				if (input == -1) 
+				{
+					break;
+				}
+
+				cidx = input - 1;
+
+				if (cidx >= 0 && cidx < count) 
+				{
+					candidate* candPtr = findcand(ecands[cidx].getcid());
+					if (candPtr != NULL) 
+					{
+						elect->addcand(candPtr);
+						cout << "Candidate added to election." << endl;
+					}
+				}
+				else
+				{
+					cout << "Invalid candidate number." << endl;
+				}
+
+				cout << "Add another candidate? (y/n): ";
+				cin >> cadd;
+			}
+
+			delete[] ecands;
+		}
+		else if (choice == 2) 
+		{
+			nationalelection* elect = getnelect();
+			if (elect == NULL) 
+			{
+				cout << "No national election found." << endl;
+				return;
+			}
+
+			if (elect->getisstarted()) 
+			{
+				cout << "Cannot add candidates to an election that has already started." << endl;
+				return;
+			}
+
+			int count;
+			candidate* ecands = geteligiblecands("national", 0, count);
+
+			if (count == 0) 
+			{
+				cout << "No eligible candidates found." << endl;
+				return;
+			}
+
+			cout << "\nEligible Candidates:" << endl;
+			for (int i = 0; i < count; i++) 
+			{
+				cout << i + 1 << ". ID: " << ecands[i].getcid() << endl;
+				cout << "Name: " << ecands[i].getname() << endl;
+				cout<< "Party: " << ecands[i].getparty() << endl;
+			}
+
+			int cidx;
+			char cadd = 'y';
+
+			while (cadd == 'y' || cadd == 'Y') 
+			{
+				cout << "Enter candidate number to add (1-" << count << ") or -1 to exit: ";
+				int input;
+				cin >> input;
+
+				if (input == -1) 
+				{
+					break;
+				}
+
+				cidx = input - 1;
+
+				if (cidx >= 0 && cidx < count) 
+				{
+					candidate* candPtr = findcand(ecands[cidx].getcid());
+					if (candPtr != NULL) 
+					{
+						elect->addcand(candPtr);
+						cout << "Candidate added to election." << endl;
+					}
+				}
+				else 
+				{
+					cout << "Invalid candidate number." << endl;
+				}
+
+				cout << "Add another candidate? (y/n): ";
+				cin >> cadd;
+			}
+
+			delete[] ecands;
+		}
+	}
+
 	void startelection() 
 	{
 		int choice;
