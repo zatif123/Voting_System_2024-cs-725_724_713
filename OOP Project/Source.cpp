@@ -906,6 +906,86 @@ public:
 		}
 	}
 
+	void viewresult() 
+	{
+		int choice;
+		cout << "\n-----View Results-----" << endl;
+		cout << "1. Local Election Results" << endl;
+		cout << "2. National Election Results" << endl;
+		cout << "3. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		if (choice == 1) 
+		{
+			int ccode;
+			cout << "Enter city code: ";
+			cin >> ccode;
+
+			localelection* elect = findlelect(ccode);
+			if (elect == NULL) 
+			{
+				cout << "No Election found for City code " << ccode << endl;
+				return;
+			}
+
+			if (!elect->getisended()) 
+			{
+				cout << "Election has not ended yet. Results are not available." << endl;
+				return;
+			}
+
+			result res(elect);
+			res.resultadmin();
+		}
+		else if (choice == 2) 
+		{
+			nationalelection* elect = getnelect();
+			if (elect == NULL) 
+			{
+				cout << "No National Election found." << endl;
+				return;
+			}
+
+			if (!elect->getisended()) 
+			{
+				cout << "Election has not ended yet. Results are not available." << endl;
+				return;
+			}
+
+			result res(elect);
+			res.resultadmin();
+		}
+	}
+
+	void mgrmenu()
+	{
+		int choice;
+		cout << "\n-----Manage Election-----" << endl;
+		cout << "1. Add Candidates to Election" << endl;
+		cout << "2. Start Election" << endl;
+		cout << "3. End Election" << endl;
+		cout << "4. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		switch (choice) 
+		{
+		case 1:
+			addctoe();
+			break;
+		case 2:
+			startelection();
+			break;
+		case 3:
+			endelection();
+			break;
+		default:
+			break;
+		}
+	}
+
+
 };
 class user {
 protected:
