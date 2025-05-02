@@ -148,6 +148,61 @@ public:
 
 };
 
+class voter : public user {
+private:
+	string name;
+	int ccode;
+	int age;
+	bool vloc;
+	bool vnat;
+
+public:
+	voter() : user() {
+		name = "";
+		ccode = 0;
+		age = 0;
+		vloc = false;
+		vnat = false;
+	}
+
+	voter(const string& uname, const string& pwd, const string& n, int city, int a)
+		: user(uname, pwd) {
+		name = n;
+		ccode = city;
+		age = a;
+		vloc = false;
+		vnat = false;
+	}
+
+	int getccode() const {
+		return ccode;
+	}
+
+	bool getvloc() const {
+		return vloc;
+	}
+
+	bool getvnat() const {
+		return vnat;
+	}
+
+	string getname() const {
+		return name;
+	}
+
+	int getage() const {
+		return age;
+	}
+
+	void setvloc(bool status) {
+		vloc = status;
+	}
+
+	void setvnat(bool status) {
+		vnat = status;
+	}
+};
+
 
 class localelection :public election {
 private:
