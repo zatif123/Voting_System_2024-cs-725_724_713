@@ -168,14 +168,15 @@ public:
 	}
 
 	voter(const string& uname, const string& pwd, const string& n, int city, int a)
-		: user(uname, pwd) {
+		: user(uname, pwd) 
+	{
 		name = n;
 		ccode = city;
 		age = a;
 		vloc = false;
 		vnat = false;
 	}
-	void viewel(emgr* mgr) 
+	void viewel(emanager* mgr) 
 	{
 		cout << "\n===== View Elections =====" << endl;
 		cout << "1. Local Elections" << endl;
@@ -186,9 +187,11 @@ public:
 		int choice;
 		cin >> choice;
 
-		if (choice == 1) {
-			locelect* elect = mgr->findlelect(ccode);
-			if (elect == nullptr) {
+		if (choice == 1) 
+		{
+			localelection* elect = mgr->findlelect(ccode);
+			if (elect == nullptr) 
+			{
 				cout << "No local election found for your city code." << endl;
 				return;
 			}
@@ -197,8 +200,9 @@ public:
 		}
 		else if (choice == 2)
 		{
-			natelect* elect = mgr->getnelect();
-			if (elect == nullptr) {
+			nationalelection* elect = mgr->getnelect();
+			if (elect == nullptr) 
+			{
 				cout << "No national election found." << endl;
 				return;
 			}
@@ -207,7 +211,7 @@ public:
 		}
 	}
 
-	void vote(emgr* mgr)
+	void vote(emanager* mgr)
 	{
 		cout << "\n===== Cast Vote =====" << endl;
 		cout << "1. Local Election" << endl;
@@ -226,8 +230,9 @@ public:
 				return;
 			}
 
-			locelect* elect = mgr->findlelect(ccode);
-			if (elect == nullptr) {
+			localelection* elect = mgr->findlelect(ccode);
+			if (elect == nullptr) 
+			{
 				cout << "No local election found for your city code." << endl;
 				return;
 			}
@@ -267,19 +272,22 @@ public:
 					cout << "Vote cast successfully for " << candPtr->getname() << "." << endl;
 				}
 			}
-			else {
+			else 
+			{
 				cout << "Invalid candidate number." << endl;
 			}
 		}
 		else if (choice == 2) 
 		{
-			if (vnat) {
+			if (vnat) 
+			{
 				cout << "You have already voted in the national election." << endl;
 				return;
 			}
 
-			natelect* elect = mgr->getnelect();
-			if (elect == nullptr) {
+			nationalelection* elect = mgr->getnelect();
+			if (elect == nullptr) 
+			{
 				cout << "No national election found." << endl;
 				return;
 			}
@@ -318,7 +326,8 @@ public:
 					cout << "Vote cast successfully for " << candPtr->getname() << "." << endl;
 				}
 			}
-			else {
+			else 
+			{
 				cout << "Invalid candidate number." << endl;
 			}
 		}
@@ -331,7 +340,7 @@ public:
 		cout << "National Election: " << (vnat ? "Voted" : "Not Voted") << endl;
 	}
 
-	void viewres(emgr* mgr)
+	void viewres(emanager* mgr)
 	{
 		cout << "\n===== View Results =====" << endl;
 		cout << "1. Local Election Results" << endl;
@@ -350,7 +359,7 @@ public:
 				return;
 			}
 
-			locelect* elect = mgr->findlelect(ccode);
+			localelection* elect = mgr->findlelect(ccode);
 			if (elect == nullptr)
 			{
 				cout << "No local election found for your city code." << endl;
@@ -364,28 +373,31 @@ public:
 			}
 
 			result res(elect);
-			res.disprvoter();
+			res.resultvoter();
 		}
 		else if (choice == 2)
 		{
-			if (!vnat) {
+			if (!vnat) 
+			{
 				cout << "You have not voted in the national election." << endl;
 				return;
 			}
 
-			natelect* elect = mgr->getnelect();
-			if (elect == nullptr) {
+			nationalelection* elect = mgr->getnelect();
+			if (elect == nullptr) 
+			{
 				cout << "No national election found." << endl;
 				return;
 			}
 
-			if (!elect->getisended()) {
+			if (!elect->getisended()) 
+			{
 				cout << "Election has not ended yet. Results are not available." << endl;
 				return;
 			}
 
 			result res(elect);
-			res.disprvoter();
+			res.resultvoter();
 		}
 	}
 
@@ -1256,7 +1268,17 @@ public:
 		}
 	}
 
+	~emanager() 
+	{
+		delete[] lelection;
 
+		if (hasnat) 
+		{
+			delete nelection;
+		}
+
+		delete[] cand;
+	}
 };
 class user {
 protected:
@@ -1458,13 +1480,12 @@ void candidate::viewresult(emanager* mgr)
 	}
 }
 
-int main() {
+int main() 
+{
 	emanager* mgr = new emanager();
 	admin* adm = new admin();
 
 	cout << "===== Online Voting System =====" << endl;
-	cout << "Welcome to the Online Voting System!" << endl;
-	cout << "This system allows for managing elections, candidates, and voters." << endl;
 	cout << "Default admin credentials: username: admin, password: admin123" << endl;
 	cout << "===============================" << endl;
 
@@ -1573,8 +1594,85 @@ int main() {
 			break;
 		}
 		
-		case 3: {
-			cout << "Voter functionality will be implemented in the next version." << endl;
+		case 3: 
+		{
+			string n;
+			int ccode;
+			int age;
+
+			cout << "\n===== Voter Login/Registration =====" << endl;
+			cout << "Name: ";
+			cin >> n;
+			cout << "City Code: ";
+			cin >> ccode;
+			cout << "Age: ";
+			cin >> age;
+
+			if (age < 18) 
+			{
+				cout << "You must be at least 18 years old to vote." << endl;
+				break;
+			}
+
+			voter* vptr = adm->findvoter(n, ccode, age);
+
+			if (vptr == NULL) 
+			{
+				string uname, pwd;
+
+				cout << "New Voter Registration:" << endl;
+				cout << "Create Username: ";
+				cin >> uname;
+				cout << "Create Password: ";
+				cin >> pwd;
+
+				voter* newvoter = new voter(uname, pwd, n, ccode, age);
+				adm->addvoter(newvoter);
+				vptr = adm->findvoter(n, ccode, age);
+				delete newvoter;
+				cout << "Registration successful!" << endl;
+			}
+			else 
+			{
+				cout << "Welcome back, " << vptr->getname() << "!" << endl;
+			}
+
+			bool vrun = true;
+			while (vrun) 
+			{
+				cout << "\n===== Voter Menu =====" << endl;
+				cout << "1. View Elections" << endl;
+				cout << "2. Cast Vote" << endl;
+				cout << "3. Check Vote Status" << endl;
+				cout << "4. View Result" << endl;
+				cout << "5. Exit" << endl;
+				cout << "Enter your choice: ";
+
+				int vchoice;
+				cin >> vchoice;
+
+				switch (vchoice) 
+				{
+				case 1:
+					vptr->viewel(mgr);
+					break;
+				case 2:
+					vptr->vote(mgr);
+					break;
+				case 3:
+					vptr->status();
+					break;
+				case 4:
+					vptr->viewres(mgr);
+					break;
+				case 5:
+					vrun = false;
+					cout << "Returning to main menu." << endl;
+					break;
+				default:
+					cout << "Invalid choice. Please try again." << endl;
+				}
+			}
 			break;
 		}
 		case 4:
