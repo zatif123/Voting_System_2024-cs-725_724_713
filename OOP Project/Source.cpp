@@ -1518,7 +1518,11 @@ int main()
 					cout << "\n===== Admin Menu =====" << endl;
 					cout << "1. Create Election" << endl;
 					cout << "2. Create Candidate" << endl;
-					cout << "3. Exit" << endl;
+					cout << "3. View Elections" << endl;
+					cout << "4. View Candidates" << endl;
+					cout << "5. Manage Elections" << endl;
+					cout << "6. View Results" << endl;
+					cout << "7. Exit" << endl;
 					cout << "Enter your choice: ";
 
 					int achoice;
@@ -1529,9 +1533,21 @@ int main()
 						adm->creel(mgr);
 						break;
 					case 2:
-						adm->createcand(mgr);
+						adm->crecand(mgr);
 						break;
 					case 3:
+						adm->viewel(mgr);
+						break;
+					case 4:
+						adm->viewcands(mgr);
+						break;
+					case 5:
+						mgr->mgrel();
+						break;
+					case 6:
+						mgr->viewres();
+						break;
+					case 7:
 						arun = false;
 						cout << "Returning to main menu." << endl;
 						break;
@@ -1553,7 +1569,7 @@ int main()
 			cout << "Password: ";
 			cin >> pwd;
 
-			candidate* cptr = mgr->findcandbyuname(uname);
+			candidate* cptr = mgr->findcbyuser(uname);
 			if (cptr != nullptr && cptr->login(uname, pwd)) {
 				cout << "Login successful!" << endl;
 
