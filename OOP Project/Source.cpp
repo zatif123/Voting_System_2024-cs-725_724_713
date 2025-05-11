@@ -161,6 +161,22 @@ public:
 	}
 	virtual void calcresult() = 0;
 
+	void setname(const string& n) 
+	{
+		name = n; 
+	}
+	void setrules(const string& r) 
+	{
+		rules = r; 
+	}
+	void setisstarted(bool s)
+	{
+		isstarted = s; 
+	}
+	void setisended(bool e) 
+	{
+		isended = e; 
+	}
 };
 
 class voter : public user 
@@ -723,7 +739,8 @@ private:
 
 
 
-	void loadCandidates() {
+	void loadCandidates() 
+	{
 		ifstream fin(candidate_file);
 		if (!fin)
 			return;
@@ -732,19 +749,22 @@ private:
 		string line;
 
 		bool skipFirstLine = false;
-		if (getline(fin, line)) {
-			if (line.length() > 2 && line.substr(0, 2) == "//") {
+		if (getline(fin, line)) 
+		{
+			if (line.length() > 2 && line.substr(0, 2) == "//") 
+			{
 				skipFirstLine = true;
 			}
-			else {
-				// Not a comment: reset by reopening the file
+			else 
+			{
 				fin.close();
 				fin.open(candidate_file);
 			}
 		}
 
-		// Rewritten without peek()
-		while (true) {
+		
+		while (true) 
+		{
 			int cid, ccode, votes;
 			string name, username, password, party, category;
 
@@ -758,8 +778,8 @@ private:
 			getline(fin >> ws, category);
 
 			if (!(fin >> votes)) break;
-			getline(fin, line); // blank line
-			getline(fin, line); // delimiter line
+			getline(fin, line);
+			getline(fin, line);
 
 			if (line != "---") break;
 
@@ -772,7 +792,8 @@ private:
 		fin.close();
 	}
 
-	void saveCandidates() {
+	void saveCandidates()
+	{
 		ofstream fout(candidate_file.c_str());
 		if (!fout) return;
 		fout << "// Candidate data: cid, name, ccode, username, password, party, category, votes" << endl;
@@ -790,24 +811,27 @@ private:
 		fout.close();
 	}
 
-	void loadLocalElections() {
+	void loadLocalElections() 
+	{
 		ifstream fin(local_election_file.c_str());
 		if (!fin) return;
 
 		int loadedCount = 0;
 		string line;
 
-		// Skip comment lines at the beginning
-		while (getline(fin, line)) {
+	
+		while (getline(fin, line)) 
+		{
 			if (!(line.length() > 2 && line.substr(0, 2) == "//")) {
-				// Non-comment line found, reset stream to reprocess this line
+		
 				fin.close();
 				fin.open(local_election_file.c_str());
 				break;
 			}
 		}
 
-		while (true) {
+		while (true) 
+		{
 			string name, rules;
 			int ccode, electCandCount;
 			bool isstarted, isended;
@@ -818,29 +842,31 @@ private:
 
 			if (!(fin >> isstarted)) break;
 			if (!(fin >> isended)) break;
-			getline(fin >> ws, line); // consume newline
+			getline(fin >> ws, line);
 
-			locelect tempElect(name, rules, ccode);
+			localelection tempElect(name, rules, ccode);
 			tempElect.setisstarted(isstarted);
 			tempElect.setisended(isended);
 
 			if (!(fin >> electCandCount)) break;
-			getline(fin >> ws, line); // consume newline before candidates
+			getline(fin >> ws, line);
 
-			for (int i = 0; i < electCandCount; ++i) {
+			for (int i = 0; i < electCandCount; ++i) 
+			{
 				int candId;
 				if (!(fin >> candId)) goto load_local_error;
 				getline(fin >> ws, line); // consume newline after candId
 				candidate* candPtr = findcand(candId);
-				if (candPtr) {
+				if (candPtr) 
+				{
 					tempElect.addcand(candPtr);
 				}
 			}
 
-			getline(fin, line); // read the end marker
+			getline(fin, line);
 			if (line != "=== ELECTION END ===") break;
 
-			addlelect(&tempElect);
+			addlelection(&tempElect);
 			loadedCount++;
 		}
 
@@ -849,19 +875,22 @@ private:
 	}
 
 
-	void saveLocalElections() {
+	void saveLocalElections() 
+	{
 		ofstream fout(local_election_file.c_str());
 		if (!fout) return;
 		fout << " Local Election data: ccode, name, rules, isstarted(0/1), isended(0/1)" << endl;
 		fout << " Records separated by =ELECTION END=" << endl;
-		for (int i = 0; i < lcount; ++i) {
+		for (int i = 0; i < lcount; ++i) 
+		{
 			fout << lelection[i].getccode() << endl;
 			fout << lelection[i].getname() << endl;
 			fout << lelection[i].getrules() << endl;
 			fout << lelection[i].getisstarted() << endl;
 			fout << lelection[i].getisended() << endl;
 			fout << lelection[i].getccount() << endl;
-			for (int j = 0; j < lelection[i].getccount(); ++j) {
+			for (int j = 0; j < lelection[i].getccount(); ++j) 
+			{
 				fout << lelection[i].getcand(j).getcid() << endl;
 			}
 			fout << "=== ELECTION END ===" << endl;
@@ -869,16 +898,19 @@ private:
 		fout.close();
 	}
 
-	void loadNationalElection() {
+	void loadNationalElection() 
+	{
 		ifstream fin(national_election_file.c_str());
 		if (!fin) return;
 
 		string line;
 
-		// Skip header comment lines
-		while (getline(fin, line)) {
-			if (!(line.length() > 2 && line.substr(0, 2) == "//")) {
-				// Found the first actual data line — rewind by reopening
+	
+		while (getline(fin, line)) 
+		{
+			if (!(line.length() > 2 && line.substr(0, 2) == "//")) 
+			{
+	
 				fin.close();
 				fin.open(national_election_file.c_str());
 				break;
@@ -889,26 +921,52 @@ private:
 		int electCandCount;
 		bool isstarted, isended;
 
-		if (!getline(fin >> ws, name)) { fin.close(); return; }
-		if (!getline(fin, rules)) { fin.close(); return; }
-		if (!(fin >> isstarted)) { fin.close(); return; }
-		if (!(fin >> isended)) { fin.close(); return; }
-		getline(fin >> ws, line); // consume leftover newline
+		if (!getline(fin >> ws, name)) 
+		{
+			fin.close(); 
+			return; 
+		}
+		if (!getline(fin, rules)) 
+		{
+			fin.close(); 
+			return; 
+		}
+		if (!(fin >> isstarted)) 
+		{
+			fin.close();
+			return; 
+		}
+		if (!(fin >> isended)) 
+		{
+			fin.close(); 
+			return; 
+		}
+		getline(fin >> ws, line);
 
-		natelect tempElect(name, rules);
+		nationalelection tempElect(name, rules);
 		tempElect.setisstarted(isstarted);
 		tempElect.setisended(isended);
 
-		if (!(fin >> electCandCount)) { fin.close(); return; }
-		getline(fin >> ws, line); // consume newline before candidate IDs
+		if (!(fin >> electCandCount)) 
+		{
+			fin.close();
+			return; 
+		}
+		getline(fin >> ws, line);
 
-		for (int i = 0; i < electCandCount; ++i) {
+		for (int i = 0; i < electCandCount; ++i) 
+		{
 			int candId;
-			if (!(fin >> candId)) { fin.close(); return; }
-			getline(fin >> ws, line); // consume newline after candidate ID
+			if (!(fin >> candId))
+			{
+				fin.close();
+				return;
+			}
+			getline(fin >> ws, line);
 
 			candidate* candPtr = findcand(candId);
-			if (candPtr) {
+			if (candPtr) 
+			{
 				tempElect.addcand(candPtr);
 			}
 		}
@@ -918,7 +976,8 @@ private:
 	}
 
 
-	void saveNationalElection() {
+	void saveNationalElection() 
+	{
 		if (!hasnat || nelection == nullptr) return;
 		ofstream fout(national_election_file.c_str());
 		if (!fout) return;
@@ -928,9 +987,10 @@ private:
 		fout << nelection->getrules() << endl;
 		fout << nelection->getisstarted() << endl;
 		fout << nelection->getisended() << endl;
-		// Save candidate IDs
+		
 		fout << nelection->getccount() << endl;
-		for (int j = 0; j < nelection->getccount(); ++j) {
+		for (int j = 0; j < nelection->getccount(); ++j) 
+		{
 			fout << nelection->getcand(j).getcid() << endl;
 		}
 		fout.close();
@@ -945,6 +1005,9 @@ public:
 		hasnat = 0;
 		cand = NULL;
 		ccount = 0;
+		loadCandidates();
+		loadLocalElections();
+		loadNationalElection();
 	}
 
 	void addlelection(localelection* e)
@@ -1501,6 +1564,10 @@ public:
 
 	~emanager() 
 	{
+		saveCandidates();
+		saveLocalElections();
+		saveNationalElection();
+
 		delete[] lelection;
 
 		if (hasnat) 
