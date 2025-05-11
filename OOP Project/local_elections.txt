@@ -1,0 +1,2 @@
+ Local Election data: ccode, name, rules, isstarted(0/1), isended(0/1)
+ Records separated by =ELECTION END=

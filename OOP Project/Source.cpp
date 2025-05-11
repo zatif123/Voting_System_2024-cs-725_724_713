@@ -1592,6 +1592,9 @@ public:
 	string getname() const {
 		return name;
 	}
+	string getpass() const {
+		return password;
+	}
 
 	int getage() const {
 		return age;
@@ -1610,6 +1613,70 @@ class admin : public user
 private:
 	voter* voters;
 	int vcount;
+
+	void loadVoters()
+	{
+		ifstream fin(voters_file.c_str());
+		if (!fin) return;
+
+		int loadedCount = 0;
+		string line;
+
+		while (getline(fin, line)) {
+			if (!(line.length() > 2 && line.substr(0, 2) == "//"))
+			{
+				fin.close();
+				fin.open(voters_file.c_str());
+				break;
+			}
+		}
+
+		while (true)
+		{
+			string name, username, password;
+			int ccode, age;
+			bool vloc, vnat;
+
+			getline(fin >> ws, username);
+			if (username.empty()) break; 
+			getline(fin >> ws, password);
+			getline(fin >> ws, name);
+
+			if (!(fin >> ccode)) break;
+			if (!(fin >> age)) break;
+			if (!(fin >> vloc)) break;
+			if (!(fin >> vnat)) break;
+			getline(fin >> ws, line); 
+
+			if (line != "---") break; 
+
+			voter tempVoter(username, password, name, ccode, age);
+			tempVoter.setvloc(vloc);
+			tempVoter.setvnat(vnat);
+			addvoter(&tempVoter);
+			loadedCount++;
+		}
+		fin.close();
+	}
+
+	void saveVoters() 
+	{
+		ofstream fout(voters_file.c_str());
+		if (!fout) return;
+		fout << "// Voter data: username, password, name, ccode, age, vloc(0/1), vnat(0/1)" << endl;
+		for (int i = 0; i < vcount; ++i) {
+			fout << voters[i].getusername() << endl;
+			
+			fout << voters[i].getname() << endl;
+			fout << voters[i].getccode() << endl;
+			fout << voters[i].getpass() << endl;
+			fout << voters[i].getage() << endl;
+			fout << voters[i].getvloc() << endl;
+			fout << voters[i].getvnat() << endl;
+			fout << "---" << endl;
+		}
+		fout.close();
+	}
 public:
 	admin() : user()
 	{
