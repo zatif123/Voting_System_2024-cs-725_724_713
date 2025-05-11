@@ -1,0 +1,1 @@
+// Voter data: username, password, name, ccode, age, vloc(0/1), vnat(0/1)

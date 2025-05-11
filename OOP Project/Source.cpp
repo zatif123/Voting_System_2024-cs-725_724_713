@@ -1682,10 +1682,18 @@ public:
 	{
 		username = "admin";
 		password = "admin123";
+		voters = nullptr;
+		vcount = 0;
+		loadVoters();
 	}
 
 	admin(const string& uname, const string& pwd) : user(uname, pwd)
 	{
+	}
+	~admin()
+	{
+		saveVoters();
+		delete[] voters;
 	}
 	void createcand(emanager* mgr) 
 	{

@@ -1,1 +1,2 @@
 // Candidate data: cid, name, ccode, username, password, party, category, votes
+
