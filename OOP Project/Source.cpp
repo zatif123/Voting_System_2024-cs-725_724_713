@@ -959,8 +959,13 @@ public:
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
-		cin >> choice;
-
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
 		if (choice == 1) 
 		{
 			int ccode;
@@ -1111,7 +1116,14 @@ public:
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
-		cin >> choice;
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
+		
 
 		if (choice == 1) 
 		{
@@ -1173,7 +1185,14 @@ public:
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
-		cin >> choice;
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
+		
 
 		if (choice == 1) 
 		{
@@ -1235,7 +1254,14 @@ public:
 		cout << "2. National Election Results" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
-		cin >> choice;
+		
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
 
 		if (choice == 1) 
 		{
@@ -1288,7 +1314,14 @@ public:
 		cout << "3. End Election" << endl;
 		cout << "4. Exit" << endl;
 		cout << "Enter your choice: ";
-		cin >> choice;
+		
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 4)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+			}
+		} while (choice < 1 || choice > 4);
 
 		switch (choice) 
 		{
@@ -1353,14 +1386,21 @@ public:
 	}
 	void viewel(emanager* mgr)
 	{
+		int choice;
+
 		cout << "\n===== View Elections =====" << endl;
 		cout << "1. Local Elections" << endl;
 		cout << "2. National Elections" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
 
-		int choice;
-		cin >> choice;
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
 
 		if (choice == 1)
 		{
@@ -1388,14 +1428,22 @@ public:
 
 	void vote(emanager* mgr)
 	{
+
+		int choice;
 		cout << "\n===== Cast Vote =====" << endl;
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
 
-		int choice;
-		cin >> choice;
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
+
 
 		if (choice == 1)
 		{
@@ -1517,14 +1565,22 @@ public:
 
 	void viewres(emanager* mgr)
 	{
+
+		int choice;
+
 		cout << "\n===== View Results =====" << endl;
 		cout << "1. Local Election Results" << endl;
 		cout << "2. National Election Results" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
 
-		int choice;
-		cin >> choice;
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
 
 		if (choice == 1)
 		{
@@ -1616,18 +1672,24 @@ private:
 
 	void loadVoters()
 	{
-		ifstream fin(voters_file.c_str());
-		if (!fin) return;
+		ifstream fin(voters_file);
+		if (!fin)
+			return;
 
 		int loadedCount = 0;
 		string line;
 
-		while (getline(fin, line)) {
-			if (!(line.length() > 2 && line.substr(0, 2) == "//"))
+		bool skipFirstLine = false;
+		if (getline(fin, line))
+		{
+			if (line.length() > 2 && line.substr(0, 2) == "//")
+			{
+				skipFirstLine = true;
+			}
+			else
 			{
 				fin.close();
-				fin.open(voters_file.c_str());
-				break;
+				fin.open(voters_file);
 			}
 		}
 
@@ -1666,10 +1728,10 @@ private:
 		fout << "// Voter data: username, password, name, ccode, age, vloc(0/1), vnat(0/1)" << endl;
 		for (int i = 0; i < vcount; ++i) {
 			fout << voters[i].getusername() << endl;
-			
+			fout << voters[i].getpass() << endl;			
 			fout << voters[i].getname() << endl;
 			fout << voters[i].getccode() << endl;
-			fout << voters[i].getpass() << endl;
+
 			fout << voters[i].getage() << endl;
 			fout << voters[i].getvloc() << endl;
 			fout << voters[i].getvnat() << endl;
@@ -1678,17 +1740,13 @@ private:
 		fout.close();
 	}
 public:
-	admin() : user()
+	
+
+	admin(const string& uname= "admin", const string& pwd= "admin123") : user(uname, pwd)
 	{
-		username = "admin";
-		password = "admin123";
 		voters = nullptr;
 		vcount = 0;
 		loadVoters();
-	}
-
-	admin(const string& uname, const string& pwd) : user(uname, pwd)
-	{
 	}
 	~admin()
 	{
@@ -1730,7 +1788,14 @@ public:
 		getline(cin, party);
 
 		cout << "Enter category (local/national): ";
+		do{
 		getline(cin, category);
+		if (category != "local" && category != "national")
+		{
+			cout << "Invalid category. Please enter 'local' or 'national'." << endl;
+			return;
+		}
+		} while (category != "local" && category != "national");
 
 		candidate* cptr = new candidate(name, ccode, cid, username, password, party, category);
 		mgr->addcandidate(cptr);
@@ -1744,7 +1809,14 @@ public:
 		cout << "2. National Elections" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
-		cin >> choice;
+
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
 
 		if (choice == 1) 
 		{
@@ -1764,7 +1836,14 @@ public:
 		cout << "2. National Candidates" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
-		cin >> choice;
+
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
 
 		if (choice == 1) 
 		{
@@ -1783,7 +1862,14 @@ public:
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
-		cin >> choice;
+
+		do {
+			cin >> choice;
+			if (choice < 1 || choice > 3)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
+			}
+		} while (choice < 1 || choice > 3);
 
 		if (choice == 1)
 		{
@@ -1827,15 +1913,15 @@ public:
 		  
 		        voter* newvoters = new voter[vcount + 1];
 		        
-		        // Copy existing voters to new array
+
 		        for (int i = 0; i < vcount; i++) {
 		            newvoters[i] = voters[i];
 		        }
-		        
-		        // Add the new voter to the array
+
+
 		        newvoters[vcount] = *vptr;
 		        
-		        // Delete old array and update pointers
+
 		        delete[] voters;
 		        voters = newvoters;
 		        vcount++;
@@ -1897,15 +1983,23 @@ int main()
 
 	bool running = true;
 	while (running) {
+
+		int choice;
 		cout << "\n===== Online Voting System =====" << endl;
 		cout << "1. Admin" << endl;
 		cout << "2. Candidate" << endl;
 		cout << "3. Voter" << endl;
 		cout << "4. Exit" << endl;
-		cout << "Enter your choice: ";
 
-		int choice;
-		cin >> choice;
+		do {
+			cout << "Enter your choice: ";
+
+			cin >> choice;
+			if (choice < 1 || choice > 4)
+			{
+				cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+			}
+		} while (choice < 1 || choice > 4);
 
 		switch (choice) {
 		case 1: {
@@ -1921,6 +2015,8 @@ int main()
 
 				bool arun = true;
 				while (arun) {
+
+					int achoice;
 					cout << "\n===== Admin Menu =====" << endl;
 					cout << "1. Create Election" << endl;
 					cout << "2. Create Candidate" << endl;
@@ -1929,10 +2025,17 @@ int main()
 					cout << "5. Manage Elections" << endl;
 					cout << "6. View Results" << endl;
 					cout << "7. Exit" << endl;
-					cout << "Enter your choice: ";
+					
+					do {
 
-					int achoice;
-					cin >> achoice;
+						cout << "Enter your choice: ";
+
+						cin >> achoice;
+						if (achoice < 1 || achoice > 7)
+						{
+							cout << "Invalid choice. Please enter a number between 1 and 7." << endl;
+						}
+					} while (achoice < 1 || achoice > 7);
 
 					switch (achoice) {
 					case 1:
@@ -1981,15 +2084,20 @@ int main()
 
 				bool crun = true;
 				while (crun) {
+					int cchoice;
 					cout << "\n===== Candidate Menu =====" << endl;
 					cout << "1. View Info" << endl;
 					cout << "2. View Votes Received" << endl;
 					cout << "3. View Result" << endl;
 					cout << "4. Exit" << endl;
-					cout << "Enter your choice: ";
-
-					int cchoice;
-					cin >> cchoice;
+					do {
+						cout << "Enter your choice: ";
+						cin >> cchoice;
+						if (cchoice < 1 || cchoice > 4)
+						{
+							cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+						}
+					} while (cchoice < 1 || cchoice > 4);
 
 					switch (cchoice) {
 					case 1:
@@ -2062,16 +2170,23 @@ int main()
 			bool vrun = true;
 			while (vrun) 
 			{
+				int vchoice;
+
 				cout << "\n===== Voter Menu =====" << endl;
 				cout << "1. View Elections" << endl;
 				cout << "2. Cast Vote" << endl;
 				cout << "3. Check Vote Status" << endl;
 				cout << "4. View Result" << endl;
 				cout << "5. Exit" << endl;
-				cout << "Enter your choice: ";
 
-				int vchoice;
-				cin >> vchoice;
+				do {
+					cout << "Enter your choice: ";
+					cin >> vchoice;
+					if (vchoice < 1 || vchoice > 5)
+					{
+						cout << "Invalid choice. Please enter a number between 1 and 5." << endl;
+					}
+				} while (vchoice < 1 || vchoice > 5);
 
 				switch (vchoice) 
 				{

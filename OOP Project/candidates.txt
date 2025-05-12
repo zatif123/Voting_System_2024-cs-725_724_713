@@ -1,2 +1,10 @@
 // Candidate data: cid, name, ccode, username, password, party, category, votes
-
+1
+ali
+123
+ali
+1234
+pti
+local
+1
+---
