@@ -958,8 +958,9 @@ public:
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
+		
 		do {
+			cout << "Enter your choice: ";
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1115,8 +1116,9 @@ public:
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
+		
 		do {
+			cout << "Enter your choice: ";
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1184,8 +1186,9 @@ public:
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
+
 		do {
+			cout << "Enter your choice: ";
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1253,9 +1256,9 @@ public:
 		cout << "1. Local Election Results" << endl;
 		cout << "2. National Election Results" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
 		
 		do {
+			cout << "Enter your choice: ";
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1313,9 +1316,10 @@ public:
 		cout << "2. Start Election" << endl;
 		cout << "3. End Election" << endl;
 		cout << "4. Exit" << endl;
-		cout << "Enter your choice: ";
 		
 		do {
+			cout << "Enter your choice: ";
+
 			cin >> choice;
 			if (choice < 1 || choice > 4)
 			{
@@ -1392,9 +1396,10 @@ public:
 		cout << "1. Local Elections" << endl;
 		cout << "2. National Elections" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
 
 		do {
+			cout << "Enter your choice: ";
+
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1434,9 +1439,10 @@ public:
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
 
 		do {
+			cout << "Enter your choice: ";
+
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1572,9 +1578,10 @@ public:
 		cout << "1. Local Election Results" << endl;
 		cout << "2. National Election Results" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
 
 		do {
+			cout << "Enter your choice: ";
+
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1808,9 +1815,10 @@ public:
 		cout << "1. Local Elections" << endl;
 		cout << "2. National Elections" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
 
 		do {
+			cout << "Enter your choice: ";
+
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1835,9 +1843,10 @@ public:
 		cout << "1. Local Candidates" << endl;
 		cout << "2. National Candidates" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
 
 		do {
+			cout << "Enter your choice: ";
+
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
@@ -1861,9 +1870,10 @@ public:
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
 		cout << "3. Exit" << endl;
-		cout << "Enter your choice: ";
 
 		do {
+			cout << "Enter your choice: ";
+
 			cin >> choice;
 			if (choice < 1 || choice > 3)
 			{
