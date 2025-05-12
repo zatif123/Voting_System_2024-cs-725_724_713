@@ -1,2 +1,7 @@
 // National Election data: name, rules, isstarted(0/1), isended(0/1)
 // Followed by candidate data: count, then candidate IDs
+national election 1
+dont cheat
+0
+0
+0

@@ -1,17 +1,7 @@
 #include<iostream>
 #include<string>
 #include<fstream>
-#include <cstdlib>
-
 using namespace std;
-void clearScreen() {
-#ifdef _WIN32
-	system("cls");
-#else
-	system("clear");
-#endif
-}
-
 
 
 const string candidate_file = "candidates.txt";
@@ -74,11 +64,11 @@ public:
 		votes = v;
 	}
 	void disinfo() {
-		cout << "candidate ID: " << cid << endl;
-		cout << "Name:" << name << endl;
-		cout << "City code: " << ccode << endl;
-		cout << "Party: " << party << endl;
-		cout << "Catagory: " << catagory << endl;
+		cout << "candidate ID: " << getcid() << endl;
+		cout << "Name:" << getname() << endl;
+		cout << "City code: " << getcode() << endl;
+		cout << "Party: " << getparty() << endl;
+		cout << "Catagory: " << getcat() << endl;
 	}
 
 	void incvote() {
@@ -964,7 +954,6 @@ public:
 	void addctoe() 
 	{
 		int choice;
-		clearScreen();
 		cout << "\n-----Add Candidates to Election-----" << endl;
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
@@ -1123,7 +1112,6 @@ public:
 	void startelection() 
 	{
 		int choice;
-		clearScreen();
 		cout << "\n-----Start Election-----" << endl;
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
@@ -1194,7 +1182,6 @@ public:
 	void endelection() 
 	{
 		int choice;
-		clearScreen();
 		cout << "\n-----End Election-----" << endl;
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
@@ -1265,7 +1252,6 @@ public:
 	void viewresult() 
 	{
 		int choice;
-		clearScreen();
 		cout << "\n-----View Results-----" << endl;
 		cout << "1. Local Election Results" << endl;
 		cout << "2. National Election Results" << endl;
@@ -1325,7 +1311,6 @@ public:
 	void mgrmenu()
 	{
 		int choice;
-		clearScreen();
 		cout << "\n-----Manage Election-----" << endl;
 		cout << "1. Add Candidates to Election" << endl;
 		cout << "2. Start Election" << endl;
@@ -1406,7 +1391,7 @@ public:
 	void viewel(emanager* mgr)
 	{
 		int choice;
-		clearScreen();
+
 		cout << "\n===== View Elections =====" << endl;
 		cout << "1. Local Elections" << endl;
 		cout << "2. National Elections" << endl;
@@ -1450,7 +1435,6 @@ public:
 	{
 
 		int choice;
-		clearScreen();
 		cout << "\n===== Cast Vote =====" << endl;
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
@@ -1589,7 +1573,7 @@ public:
 	{
 
 		int choice;
-		clearScreen();
+
 		cout << "\n===== View Results =====" << endl;
 		cout << "1. Local Election Results" << endl;
 		cout << "2. National Election Results" << endl;
@@ -1827,7 +1811,6 @@ public:
 	void viewel(emanager* mgr) 
 	{
 		int choice;
-		clearScreen();
 		cout << "\n===== View Elections =====" << endl;
 		cout << "1. Local Elections" << endl;
 		cout << "2. National Elections" << endl;
@@ -1856,7 +1839,6 @@ public:
 	void viewcands(emanager* mgr) 
 	{
 		int choice;
-		clearScreen();
 		cout << "\n===== View Candidates =====" << endl;
 		cout << "1. Local Candidates" << endl;
 		cout << "2. National Candidates" << endl;
@@ -1884,7 +1866,6 @@ public:
 	void creel(emanager* mgr)
 	{
 		int choice;
-		clearScreen();
 		cout << "\n===== Create Election =====" << endl;
 		cout << "1. Local Election" << endl;
 		cout << "2. National Election" << endl;
@@ -2001,7 +1982,6 @@ void candidate::viewresult(emanager* mgr)
 	}
 }
 
-
 int main() 
 {
 	emanager* mgr = new emanager();
@@ -2015,7 +1995,6 @@ int main()
 	while (running) {
 
 		int choice;
-		clearScreen();
 		cout << "\n===== Online Voting System =====" << endl;
 		cout << "1. Admin" << endl;
 		cout << "2. Candidate" << endl;
@@ -2048,7 +2027,6 @@ int main()
 				while (arun) {
 
 					int achoice;
-					clearScreen();
 					cout << "\n===== Admin Menu =====" << endl;
 					cout << "1. Create Election" << endl;
 					cout << "2. Create Candidate" << endl;
@@ -2117,7 +2095,6 @@ int main()
 				bool crun = true;
 				while (crun) {
 					int cchoice;
-					clearScreen();
 					cout << "\n===== Candidate Menu =====" << endl;
 					cout << "1. View Info" << endl;
 					cout << "2. View Votes Received" << endl;
@@ -2204,7 +2181,7 @@ int main()
 			while (vrun) 
 			{
 				int vchoice;
-				clearScreen();
+
 				cout << "\n===== Voter Menu =====" << endl;
 				cout << "1. View Elections" << endl;
 				cout << "2. Cast Vote" << endl;
