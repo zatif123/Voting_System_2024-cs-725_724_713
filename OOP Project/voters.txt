@@ -1,9 +1,10 @@
-// Voter data: username, password, name, ccode, age, vloc(0/1), vnat(0/1)
-ali
-ali123
-ali
+// Voter data: username, password, name, ccode, age, vloc(0/1), vnat(0/1), cnic
+atif
+123
+atif
 123
 19
 0
 0
+3840475634337
 ---

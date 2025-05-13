@@ -73,7 +73,8 @@ public:
 
 	void incvote() {
 		votes++;
-	}bool login(string uname, string pwd) {
+	}
+	bool login(string uname, string pwd) {
 		return (username == uname) && (password == pwd);
 
 	}
@@ -1368,6 +1369,7 @@ private:
 	int age;
 	bool vloc;
 	bool vnat;
+	string cnic;
 
 public:
 	voter() : user()
@@ -1377,12 +1379,14 @@ public:
 		age = 0;
 		vloc = false;
 		vnat = false;
+		cnic = "";
 	}
 
-	voter(const string& uname, const string& pwd, const string& n, int city, int a)
+	voter(const string& uname, const string& pwd, const string& n, int city, int a, const string& cn)
 		: user(uname, pwd)
 	{
 		name = n;
+		cnic = cn;
 		ccode = city;
 		age = a;
 		vloc = false;
@@ -1639,6 +1643,9 @@ public:
 		}
 	}
 
+	string getcnic() const {
+		return cnic;
+	}
 
 	int getccode() const {
 		return ccode;
@@ -1702,7 +1709,7 @@ private:
 
 		while (true)
 		{
-			string name, username, password;
+			string name, username, password,cnic;
 			int ccode, age;
 			bool vloc, vnat;
 
@@ -1715,11 +1722,12 @@ private:
 			if (!(fin >> age)) break;
 			if (!(fin >> vloc)) break;
 			if (!(fin >> vnat)) break;
+			getline(fin >> ws, cnic);
 			getline(fin >> ws, line); 
 
 			if (line != "---") break; 
 
-			voter tempVoter(username, password, name, ccode, age);
+			voter tempVoter(username, password, name, ccode, age,cnic);
 			tempVoter.setvloc(vloc);
 			tempVoter.setvnat(vnat);
 			addvoter(&tempVoter);
@@ -1732,7 +1740,7 @@ private:
 	{
 		ofstream fout(voters_file.c_str());
 		if (!fout) return;
-		fout << "// Voter data: username, password, name, ccode, age, vloc(0/1), vnat(0/1)" << endl;
+		fout << "// Voter data: username, password, name, ccode, age, vloc(0/1), vnat(0/1), cnic" << endl;
 		for (int i = 0; i < vcount; ++i) {
 			fout << voters[i].getusername() << endl;
 			fout << voters[i].getpass() << endl;			
@@ -1742,6 +1750,7 @@ private:
 			fout << voters[i].getage() << endl;
 			fout << voters[i].getvloc() << endl;
 			fout << voters[i].getvnat() << endl;
+			fout << voters[i].getcnic() << endl;
 			fout << "---" << endl;
 		}
 		fout.close();
@@ -1937,7 +1946,7 @@ public:
 		        vcount++;
 		    }
 		
-		    voter* findvoter(const string& n, int ccode, int age) {
+	voter* findvoter(const string& n, int ccode, int age) {
 		        for (int i = 0; i < vcount; i++) {
 		            if (voters[i].getname() == n &&
 		                voters[i].getccode() == ccode &&
@@ -1947,6 +1956,14 @@ public:
 		        }
 		        return nullptr;
 		    }
+	voter* findvoterbycnic(const string& cn) {
+		for (int i = 0; i < vcount; i++) {
+			if (voters[i].getcnic() == cn) {
+				return &voters[i];
+			}
+		}
+		return nullptr;
+	}
 		
 };
 void candidate::viewresult(emanager* mgr) 
@@ -2136,89 +2153,140 @@ int main()
 		
 		case 3: 
 		{
-			string n;
-			int ccode;
-			int age;
+			string cnic;
+			voter* vptr = nullptr;
 
 			cout << "\n===== Voter Login/Registration =====" << endl;
-			cout << "Name: ";
-			cin >> n;
-			cout << "City Code: ";
-			cin >> ccode;
-			cout << "Age: ";
-			cin >> age;
 
-			if (age < 18) 
+			cout << "Enter your CNIC (13 digits): ";
+			cin >> cnic;
+			while (cnic.length() != 13) 
 			{
-				cout << "You must be at least 18 years old to vote." << endl;
-				break;
+				cout << "Invalid CNIC. It must be 13 digits long." << endl;
+				cout << "Please re-enter your CNIC (13 digits): ";
+				cin >> cnic;
 			}
 
-			voter* vptr = adm->findvoter(n, ccode, age);
+			vptr = adm->findvoterbycnic(cnic);
 
-			if (vptr == NULL) 
+			if (vptr != nullptr) 
 			{
+				cout << "CNIC found. Welcome back, " << vptr->getname() << "! Please login." << endl;
+				string uname_login, pwd_login;
+				cout << "Username: ";
+				cin >> uname_login;
+				cout << "Password: ";
+				cin >> pwd_login;
+
+				if (vptr->login(uname_login, pwd_login)) 
+				{
+					cout << "Login successful!" << endl;
+				}
+				else 
+				{
+					cout << "Invalid username or password for the given CNIC." << endl;
+					vptr = nullptr;
+				}
+			}
+			
+
+			else {
+				cout << "CNIC not found. Proceeding with new voter registration." << endl;
+				cout << "Your CNIC will be: " << cnic << endl;
+
+				string name;
+				int ccode;
+				int age;
 				string uname, pwd;
 
-				cout << "New Voter Registration:" << endl;
-				cout << "Create Username: ";
-				cin >> uname;
-				cout << "Create Password: ";
-				cin >> pwd;
+				cout << "Enter Name: ";
+				cin.ignore();
+				getline(cin, name);
 
-				voter* newvoter = new voter(uname, pwd, n, ccode, age);
-				adm->addvoter(newvoter);
-				vptr = adm->findvoter(n, ccode, age);
-				delete newvoter;
-				cout << "Registration successful!" << endl;
+				cout << "Enter City Code: ";
+				cin >> ccode;
+				cout << "Enter Age: ";
+				cin >> age;
+
+				if (age < 18) 
+				{
+					cout << "You must be at least 18 years old to vote." << endl;
+				}
+				else 
+				{
+					cout << "Create Username: ";
+					cin >> uname;
+					cout << "Create Password: ";
+					cin >> pwd;
+
+					voter* voterobj = new voter(uname, pwd, name, ccode, age, cnic);
+					adm->addvoter(voterobj);
+					vptr = adm->findvoterbycnic(cnic);
+
+					if (voterobj != nullptr) 
+					{
+						delete voterobj;
+					}
+
+					if (vptr != nullptr) 
+					{
+						cout << "Registration successful!" << endl;
+					}
+					else 
+					{
+						cout << "Error: Registration failed to retrieve voter details." << endl;
+					}
+				}
+			}
+			if (vptr != nullptr)
+			{
+				bool vrun = true;
+				while (vrun)
+				{
+					int vchoice;
+
+					cout << "\n===== Voter Menu =====" << endl;
+					cout << "1. View Elections" << endl;
+					cout << "2. Cast Vote" << endl;
+					cout << "3. Check Vote Status" << endl;
+					cout << "4. View Result" << endl;
+					cout << "5. Exit" << endl;
+
+					do {
+						cout << "Enter your choice: ";
+						cin >> vchoice;
+						if (vchoice < 1 || vchoice > 5)
+						{
+							cout << "Invalid choice. Please enter a number between 1 and 5." << endl;
+						}
+					} while (vchoice < 1 || vchoice > 5);
+
+					switch (vchoice)
+					{
+					case 1:
+						vptr->viewel(mgr);
+						break;
+					case 2:
+						vptr->vote(mgr);
+						break;
+					case 3:
+						vptr->status();
+						break;
+					case 4:
+						vptr->viewres(mgr);
+						break;
+					case 5:
+						vrun = false;
+						cout << "Returning to main menu." << endl;
+						break;
+					default:
+						cout << "Invalid choice. Please try again." << endl;
+					}
+				}
 			}
 			else 
 			{
-				cout << "Welcome back, " << vptr->getname() << "!" << endl;
-			}
-
-			bool vrun = true;
-			while (vrun) 
-			{
-				int vchoice;
-
-				cout << "\n===== Voter Menu =====" << endl;
-				cout << "1. View Elections" << endl;
-				cout << "2. Cast Vote" << endl;
-				cout << "3. Check Vote Status" << endl;
-				cout << "4. View Result" << endl;
-				cout << "5. Exit" << endl;
-
-				do {
-					cout << "Enter your choice: ";
-					cin >> vchoice;
-					if (vchoice < 1 || vchoice > 5)
-					{
-						cout << "Invalid choice. Please enter a number between 1 and 5." << endl;
-					}
-				} while (vchoice < 1 || vchoice > 5);
-
-				switch (vchoice) 
-				{
-				case 1:
-					vptr->viewel(mgr);
-					break;
-				case 2:
-					vptr->vote(mgr);
-					break;
-				case 3:
-					vptr->status();
-					break;
-				case 4:
-					vptr->viewres(mgr);
-					break;
-				case 5:
-					vrun = false;
-					cout << "Returning to main menu." << endl;
-					break;
-				default:
-					cout << "Invalid choice. Please try again." << endl;
-				}
+				cout << "Login/Registration failed. Returning to main menu." << endl;
 			}
 			break;
 		}
