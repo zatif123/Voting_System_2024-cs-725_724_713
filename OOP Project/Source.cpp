@@ -218,7 +218,7 @@ public:
 	void dispdetails() {
 		cout << "\n===== Local Election Details =====\n" << endl;
 		cout << "Election Name: " << getname() << endl;
-		cout << "City Code: " << ccode << endl;
+		cout << "City Code: " << getccode() << endl;
 		cout << "Rules: " << rules << endl;
 		cout << "Status: " << (getisstarted() ? "Started" : "Not Started") << endl;
 		cout << "Ended : " << (getisended() ? "Yes" : "No") << endl;
@@ -272,7 +272,7 @@ public:
 	void dispdetails() {
 		cout << "\n=====National Election Details=====" << endl;
 		cout << "Election Name: " << getname() << endl;
-		cout << "Rules:" << rules << endl;
+		cout << "Rules:" << getrules() << endl;
 		cout << "Status:" <<(getisstarted()? "Started" : "Not Started") << endl;
 		cout << "Ended:" <<(getisended() ?"Yes" : "No") << endl;
 		cout << "Number of Candidates:" <<getccount() << endl;
