@@ -2004,7 +2004,6 @@ int main()
 
 	bool running = true;
 	while (running) {
-		system("cls");
 
 		char choice;
 		cout << "\n===== Online Voting System =====" << endl;
@@ -2029,8 +2028,6 @@ int main()
 
 				bool arun = true;
 				while (arun) {
-					system("cls");
-
 					char achoice;
 					cout << "\n===== Admin Menu =====" << endl;
 					cout << "1. Create Election" << endl;
@@ -2092,7 +2089,6 @@ int main()
 
 				bool crun = true;
 				while (crun) {
-					system("cls");
 
 					char cchoice;
 					cout << "\n===== Candidate Menu =====" << endl;
@@ -2217,7 +2213,6 @@ int main()
 			}
 			if (vptr != nullptr)
 			{
-				system("cls");
 
 				bool vrun = true;
 				while (vrun)
