@@ -1311,32 +1311,26 @@ public:
 
 	void mgrmenu()
 	{
-		int choice;
+		char choice;
 		cout << "\n-----Manage Election-----" << endl;
 		cout << "1. Add Candidates to Election" << endl;
 		cout << "2. Start Election" << endl;
 		cout << "3. End Election" << endl;
 		cout << "4. Exit" << endl;
 		
-		do {
-			cout << "Enter your choice: ";
+		cout << "Enter your choice: ";
 
-			cin >> choice;
-			if (choice < 1 || choice > 4)
-			{
-				cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
-			}
-		} while (choice < 1 || choice > 4);
-
+		cin >> choice;
+		
 		switch (choice) 
 		{
-		case 1:
+		case '1':
 			addctoe();
 			break;
-		case 2:
+		case '2':
 			startelection();
 			break;
-		case 3:
+		case '3':
 			endelection();
 			break;
 		default:
@@ -2010,26 +2004,19 @@ int main()
 
 	bool running = true;
 	while (running) {
+		system("cls");
 
-		int choice;
+		char choice;
 		cout << "\n===== Online Voting System =====" << endl;
 		cout << "1. Admin" << endl;
 		cout << "2. Candidate" << endl;
 		cout << "3. Voter" << endl;
 		cout << "4. Exit" << endl;
-
-		do {
-			cout << "Enter your choice: ";
-
-			cin >> choice;
-			if (choice < 1 || choice > 4)
-			{
-				cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
-			}
-		} while (choice < 1 || choice > 4);
+		cout << "Enter your choice: ";
+		cin >> choice;
 
 		switch (choice) {
-		case 1: {
+		case '1': {
 			string uname, pwd;
 			cout << "\n===== Admin Login =====" << endl;
 			cout << "Username: ";
@@ -2042,8 +2029,9 @@ int main()
 
 				bool arun = true;
 				while (arun) {
+					system("cls");
 
-					int achoice;
+					char achoice;
 					cout << "\n===== Admin Menu =====" << endl;
 					cout << "1. Create Election" << endl;
 					cout << "2. Create Candidate" << endl;
@@ -2053,37 +2041,30 @@ int main()
 					cout << "6. View Results" << endl;
 					cout << "7. Exit" << endl;
 					
-					do {
+					cout << "Enter your choice: ";
 
-						cout << "Enter your choice: ";
-
-						cin >> achoice;
-						if (achoice < 1 || achoice > 7)
-						{
-							cout << "Invalid choice. Please enter a number between 1 and 7." << endl;
-						}
-					} while (achoice < 1 || achoice > 7);
-
+					cin >> achoice;
+					
 					switch (achoice) {
-					case 1:
+					case '1':
 						adm->creel(mgr);
 						break;
-					case 2:
+					case '2':
 						adm->createcand(mgr);
 						break;
-					case 3:
+					case '3':
 						adm->viewel(mgr);
 						break;
-					case 4:
+					case '4':
 						adm->viewcands(mgr);
 						break;
-					case 5:
+					case '5':
 						mgr->mgrmenu();
 						break;
-					case 6:
+					case '6':
 						mgr->viewresult();
 						break;
-					case 7:
+					case '7':
 						arun = false;
 						cout << "Returning to main menu." << endl;
 						break;
@@ -2097,7 +2078,7 @@ int main()
 			}
 			break;
 		}
-		case 2: {
+		case '2': {
 			string uname, pwd;
 			cout << "\n===== Candidate Login =====" << endl;
 			cout << "Username: ";
@@ -2111,32 +2092,28 @@ int main()
 
 				bool crun = true;
 				while (crun) {
-					int cchoice;
+					system("cls");
+
+					char cchoice;
 					cout << "\n===== Candidate Menu =====" << endl;
 					cout << "1. View Info" << endl;
 					cout << "2. View Votes Received" << endl;
 					cout << "3. View Result" << endl;
 					cout << "4. Exit" << endl;
-					do {
-						cout << "Enter your choice: ";
-						cin >> cchoice;
-						if (cchoice < 1 || cchoice > 4)
-						{
-							cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
-						}
-					} while (cchoice < 1 || cchoice > 4);
-
+					cout << "Enter your choice: ";
+					cin >> cchoice;
+				
 					switch (cchoice) {
-					case 1:
+					case '1':
 						cptr->disinfo();
 						break;
-					case 2:
+					case '2':
 						cptr->viewvotes();
 						break;
-					case 3:
+					case '3':
 						cptr->viewresult(mgr);
 						break;
-					case 4:
+					case '4':
 						crun = false;
 						cout << "Returning to main menu." << endl;
 						break;
@@ -2151,7 +2128,7 @@ int main()
 			break;
 		}
 		
-		case 3: 
+		case '3':
 		{
 			string cnic;
 			voter* vptr = nullptr;
@@ -2240,10 +2217,12 @@ int main()
 			}
 			if (vptr != nullptr)
 			{
+				system("cls");
+
 				bool vrun = true;
 				while (vrun)
 				{
-					int vchoice;
+					char vchoice;
 
 					cout << "\n===== Voter Menu =====" << endl;
 					cout << "1. View Elections" << endl;
@@ -2252,30 +2231,24 @@ int main()
 					cout << "4. View Result" << endl;
 					cout << "5. Exit" << endl;
 
-					do {
-						cout << "Enter your choice: ";
-						cin >> vchoice;
-						if (vchoice < 1 || vchoice > 5)
-						{
-							cout << "Invalid choice. Please enter a number between 1 and 5." << endl;
-						}
-					} while (vchoice < 1 || vchoice > 5);
-
+					cout << "Enter your choice: ";
+					cin >> vchoice;
+					
 					switch (vchoice)
 					{
-					case 1:
+					case '1':
 						vptr->viewel(mgr);
 						break;
-					case 2:
+					case '2':
 						vptr->vote(mgr);
 						break;
-					case 3:
+					case '3':
 						vptr->status();
 						break;
-					case 4:
+					case '4':
 						vptr->viewres(mgr);
 						break;
-					case 5:
+					case '5':
 						vrun = false;
 						cout << "Returning to main menu." << endl;
 						break;
@@ -2290,7 +2263,7 @@ int main()
 			}
 			break;
 		}
-		case 4:
+		case '4':
 			running = false;
 			cout << "Exiting system. Goodbye!" << endl;
 			break;
